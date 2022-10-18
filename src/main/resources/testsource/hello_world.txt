@@ -1,0 +1,3 @@
+public abstract class Main {
+    public final int n;
+}

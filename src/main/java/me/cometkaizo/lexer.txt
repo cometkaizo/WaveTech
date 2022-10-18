@@ -1,0 +1,14 @@
+public class Main
+->
+Token{VisibilityModifier.PUBLIC}
+Token{DeclarationKeyword.CLASS}
+Token{TypeKeyword.REFERENCE_OR_SYMBOL, "Main"}
+
+public //class Main
+->
+Token{VisibilityModifier.PUBLIC}
+
+public /*class*/ Main
+->
+Token{VisibilityModifier.PUBLIC}
+Token{TypeKeyword.REFERENCE_OR_SYMBOL, "Main"}

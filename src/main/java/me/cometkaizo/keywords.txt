@@ -1,0 +1,61 @@
+visibility modifiers // keywords that modify the visibility of a symbol // DONE
+    public
+    protected
+    package-private
+    private
+declaration keywords // keywords that are used to declare the type of any symbol
+    class // DONE
+    interface
+    @interface
+    enum
+    record
+primitive types // DONE except for void
+    int
+    long
+    short
+    byte
+    float
+    double
+    boolean
+    char
+    void
+property declaration keywords
+    extends
+    implements
+    permits
+    throws
+literals
+    true
+    false
+    null
+property modifiers
+    static
+    abstract
+    volatile
+    transient
+    native
+    sealed
+    unsealed (non-sealed)
+    final
+functional keywords // keywords that represent actions to do
+    if
+    else
+    switch
+    case
+    yield
+    default
+    do
+    while
+    for
+    return
+    break
+    continue
+    try
+    catch
+    finally
+    instanceof
+    new
+    synchronized
+reference keywords // keywords that represent an object
+    super
+    this

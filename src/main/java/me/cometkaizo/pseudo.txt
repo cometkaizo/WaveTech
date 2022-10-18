@@ -1,0 +1,55 @@
+https://www.geeksforgeeks.org/abstract-syntax-tree-ast-in-java/
+
+// Java Custom Source Code
+
+// Main class
+class GFG {
+
+    // Main driver method
+    public static void main(String[] args)
+    {
+
+        // Print statement
+        System.out.println("Hello World!");
+    }
+}
+
+CLASS_DEF -> CLASS_DEF [1:0]
+|--MODIFIERS -> MODIFIERS [1:0]
+|   `--LITERAL_PUBLIC -> public [1:0]
+|--LITERAL_CLASS -> class [1:7]
+|--IDENT -> GFG [1:13]
+`--OBJBLOCK -> OBJBLOCK [1:17]
+    |--LCURLY -> { [1:17]
+    |--METHOD_DEF -> METHOD_DEF [2:4]
+    |   |--MODIFIERS -> MODIFIERS [2:4]
+    |   |   |--LITERAL_PUBLIC -> public [2:4]
+    |   |   `--LITERAL_STATIC -> static [2:11]
+    |   |--TYPE -> TYPE [2:18]
+    |   |   `--LITERAL_VOID -> void [2:18]
+    |   |--IDENT -> main [2:23]
+    |   |--LPAREN -> ( [2:27]
+    |   |--PARAMETERS -> PARAMETERS [2:34]
+    |   |   `--PARAMETER_DEF -> PARAMETER_DEF [2:34]
+    |   |       |--MODIFIERS -> MODIFIERS [2:34]
+    |   |       |--TYPE -> TYPE [2:34]
+    |   |       |   `--ARRAY_DECLARATOR -> [ [2:34]
+    |   |       |       |--IDENT -> String [2:28]
+    |   |       |       `--RBRACK -> ] [2:35]
+    |   |       `--IDENT -> args [2:37]
+    |   |--RPAREN -> ) [2:41]
+    |   `--SLIST -> { [2:43]
+    |       |--EXPR -> EXPR [3:26]
+    |       |   `--METHOD_CALL -> ( [3:26]
+    |       |       |--DOT -> . [3:18]
+    |       |       |   |--DOT -> . [3:14]
+    |       |       |   |   |--IDENT -> System [3:8]
+    |       |       |   |   `--IDENT -> out [3:15]
+    |       |       |   `--IDENT -> println [3:19]
+    |       |       |--ELIST -> ELIST [3:27]
+    |       |       |   `--EXPR -> EXPR [3:27]
+    |       |       |       `--STRING_LITERAL -> "Hello World!" [3:27]
+    |       |       `--RPAREN -> ) [3:41]
+    |       |--SEMI -> ; [3:42]
+    |       `--RCURLY -> } [4:4]
+    `--RCURLY -> } [5:0]
