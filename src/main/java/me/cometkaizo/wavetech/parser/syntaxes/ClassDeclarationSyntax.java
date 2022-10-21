@@ -1,10 +1,12 @@
-package me.cometkaizo.wavetech.parser.syntaxparseres;
+package me.cometkaizo.wavetech.parser.syntaxes;
 
 import me.cometkaizo.wavetech.lexer.tokens.Token;
 import me.cometkaizo.wavetech.lexer.tokens.types.ObjectType;
 import me.cometkaizo.wavetech.lexer.tokens.types.PropertyModifier;
 import me.cometkaizo.wavetech.lexer.tokens.types.VisibilityModifier;
 import me.cometkaizo.wavetech.parser.Parser;
+import me.cometkaizo.wavetech.parser.syntaxes.nodes.Syntax;
+import me.cometkaizo.wavetech.parser.syntaxes.nodes.TokenTypeSyntaxNodeBuilder;
 import me.cometkaizo.wavetech.parser.nodes.*;
 
 import java.util.List;
@@ -19,35 +21,40 @@ import static me.cometkaizo.wavetech.lexer.tokens.types.PropertyModifier.*;
 import static me.cometkaizo.wavetech.lexer.tokens.types.VisibilityModifier.PACKAGE_PRIVATE;
 import static me.cometkaizo.wavetech.lexer.tokens.types.VisibilityModifier.PUBLIC;
 
-// TODO: 2022-10-16 Refactor SyntaxParser to use nodes like commands
-public class ClassDeclarationSyntaxParser extends DeclarationSyntaxParser {
+public class ClassDeclarationSyntax extends DeclarationSyntax {
 
     // (public|) class
 
-    public ClassDeclarationSyntaxParser() {
-        addExpectedSyntax(
-                new AnyMatcher(true, PUBLIC, PACKAGE_PRIVATE),
-                new AnyMatcher(true, SEALED, FINAL),
-                CLASS,
-                new TokenTypeTransformationMatcher(SYMBOL_OR_REFERENCE, SYMBOL, new AnyMatcher(false, SYMBOL))
-        );
-        addExpectedSyntax(
-                new AnyMatcher(true, PUBLIC, PACKAGE_PRIVATE),
-                new AnyMatcher(true, SEALED),
-                new AnyMatcher(true, ABSTRACT),
-                CLASS,
-                new TokenTypeTransformationMatcher(SYMBOL_OR_REFERENCE, SYMBOL, new AnyMatcher(false, SYMBOL))
-        );
+    public ClassDeclarationSyntax() {
 
-        addNextExpectedSyntax(new SyntaxParser() {
+        rootNode
+                .split(PUBLIC, PACKAGE_PRIVATE, null)
+                .split(
+                        new TokenTypeSyntaxNodeBuilder(SEALED).split(ABSTRACT, null),
+                        new TokenTypeSyntaxNodeBuilder(ABSTRACT).split(SEALED, null),
+                        new TokenTypeSyntaxNodeBuilder(FINAL),
+                        null
+                ).then(CLASS)
+                .then(SYMBOL_OR_REFERENCE, SYMBOL)
+        ;
+
+        /*
+         * root,
+         * then PUBLIC or PACKAGE_PRIVATE or none,
+         * then (SEALED then ABSTRACT or none) or FINAL or none,
+         * then CLASS,
+         * then SYMBOL_OR_REFERENCE->SYMBOL
+         */
+
+        addNextExpectedSyntax(new Syntax() {
             {
-                addExpectedSyntax(
+                rootNode.then(
                         L_BRACE
                 );
             }
 
             @Override
-            protected boolean isValidInStatus(Parser.ParserStatus status) {
+            protected boolean isValidInStatus(Parser.Status status) {
                 return true;
             }
 
@@ -60,7 +67,7 @@ public class ClassDeclarationSyntaxParser extends DeclarationSyntaxParser {
 
     @Override
     public Node create(DeclaredNode containingToken) {
-        var inputs = getExactMatchingInputPattern();
+        var inputs = getInputTokens();
 
         List<Token> visibilityModifierList = inputs.get(VisibilityModifier.class);
         VisibilityModifier visibilityModifier = visibilityModifierList == null ?
@@ -97,7 +104,7 @@ public class ClassDeclarationSyntaxParser extends DeclarationSyntaxParser {
     }
 
     @Override
-    protected boolean isValidInStatus(Parser.ParserStatus status) {
+    protected boolean isValidInStatus(Parser.Status status) {
         return true;
     }
 

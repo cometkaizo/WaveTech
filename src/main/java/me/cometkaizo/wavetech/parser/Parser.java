@@ -4,40 +4,49 @@ import me.cometkaizo.util.LogUtils;
 import me.cometkaizo.wavetech.lexer.CompilationException;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
 import me.cometkaizo.wavetech.lexer.tokens.TokenType;
-import me.cometkaizo.wavetech.lexer.tokens.types.*;
-import me.cometkaizo.wavetech.parser.syntaxparseres.ClosingSymbolSyntaxParser;
-import me.cometkaizo.wavetech.parser.syntaxparseres.DeclarationSyntaxParser;
-import me.cometkaizo.wavetech.parser.syntaxparseres.SyntaxParser;
-import me.cometkaizo.wavetech.parser.syntaxparseres.SyntaxParsers;
+import me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveOperator;
+import me.cometkaizo.wavetech.parser.syntaxes.nodes.Syntax;
 import me.cometkaizo.wavetech.parser.nodes.DeclaredNode;
 import me.cometkaizo.wavetech.parser.nodes.SourceFileNode;
+import me.cometkaizo.wavetech.parser.syntaxes.ClosingSymbolSyntax;
+import me.cometkaizo.wavetech.parser.syntaxes.DeclarationSyntax;
+import me.cometkaizo.wavetech.parser.syntaxes.Syntaxes;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Parser {
 
     private final ListIterator<Token> tokens;
+    public final SourceFileNode sourceFileToken = new SourceFileNode("DEFAULT_NAME");
 
-    private final ParserStatus status = new ParserStatus();
+    private final Status status = new Status();
 
-    public static class ParserStatus {
+    public static class Status {
 
         public Token token = null;
-        public final SourceFileNode sourceFileToken = new SourceFileNode("DEFAULT_NAME IN NEW_PARSER.JAVA");
 
         public int depth = 0;
 
         private final List<Token> tokenBuffer = new ArrayList<>();
 
-        private List<SyntaxParser> nextExpectedParsers = new ArrayList<>();
-        private List<SyntaxParser> currentValidParsers = new ArrayList<>();
-        private List<SyntaxParser> currentExactParsers = new ArrayList<>();
+        private List<Syntax> currentValidSyntaxes = createNewSyntaxes();
+        private List<Syntax> currentExactSyntaxes = new ArrayList<>();
+
+        private void reset() {
+            token = null;
+            tokenBuffer.clear();
+
+            currentExactSyntaxes.clear();
+            currentValidSyntaxes.clear();
+        }
     }
 
-    private static final List<Supplier<SyntaxParser>> allMatcherConstructors = SyntaxParsers.syntaxMatcherCreators;
+    private static final List<Supplier<Syntax>> allMatcherConstructors = Syntaxes.syntaxCreators;
 
 
 
@@ -45,20 +54,12 @@ public class Parser {
         this.tokens = tokenList.listIterator();
     }
 
-    private void reset() {
-        status.token = null;
-        status.tokenBuffer.clear();
-
-        status.currentValidParsers.clear();
-    }
-
-
 
     public SourceFileNode parse() {
         status.depth = 0;
 
-        parseInContext(status.sourceFileToken);
-        return status.sourceFileToken;
+        parseInContext(sourceFileToken);
+        return sourceFileToken;
     }
 
 
@@ -84,123 +85,96 @@ public class Parser {
 
         readToken(token);
 
-        updateSyntaxMatchers(context);
+        updateSyntaxes(context);
 
-        LogUtils.success("Expected syntax: {}", status.nextExpectedParsers);
-        LogUtils.success("All syntaxes matching {}: {}", status.tokenBuffer, status.currentValidParsers.stream().map(o -> o.getClass().getSimpleName()).toList());
-        LogUtils.success("Exact syntaxes matching {}: {}\n", status.tokenBuffer, status.currentExactParsers.stream().map(o -> o.getClass().getSimpleName()).toList());
+        LogUtils.success("All syntaxes matching {}: {}", status.tokenBuffer, status.currentValidSyntaxes.stream().map(o -> o.getClass().getSimpleName()).toList());
+        LogUtils.success("Exact syntaxes matching {}: {}\n", status.tokenBuffer, status.currentExactSyntaxes.stream().map(o -> o.getClass().getSimpleName()).toList());
 
-        if (status.nextExpectedParsers.size() > 0) {
-            handleExpectedMatchers(context);
-        } else {
-            handleMatchers(context);
-        }
+        handleSyntaxes(context);
     }
 
-    private void updateSyntaxMatchers(DeclaredNode context) {
-        if (status.nextExpectedParsers.size() > 0) return;
+    private void updateSyntaxes(DeclaredNode context) {
 
-        if (status.currentValidParsers.size() == 0) {
-            status.currentValidParsers = createNewParsers();
-            LogUtils.info("There were no valid parsers, created new matchers {}", status.currentValidParsers);
+        if (status.currentValidSyntaxes.size() == 0) {
+            status.currentValidSyntaxes = createNewSyntaxes();
+            LogUtils.info("There were no valid syntaxes, created new syntaxes");
         }
 
-        List<SyntaxParser> newValidParsers = new ArrayList<>();
-        List<SyntaxParser> newExactParsers = new ArrayList<>();
+        List<Syntax> newValidSyntaxes = new ArrayList<>();
+        List<Syntax> newExactSyntaxes = new ArrayList<>();
 
-        for (SyntaxParser syntaxParser : status.currentValidParsers) {
-            SyntaxParser.Result matchResult = syntaxParser.matchNext(context, status, status.token);
+        for (Syntax syntax : status.currentValidSyntaxes) {
+            //LogUtils.debug("trying to match syntax {} with {}", syntax, status.token);
+            Syntax.Result matchResult = syntax.matchNext(context, status, status.token);
 
             switch (matchResult) {
                 case MATCHES_SO_FAR -> {
-                    LogUtils.info("Added new valid syntax matcher {} because it matches {} so far", syntaxParser, status.token);
-                    newValidParsers.add(syntaxParser);
+                    LogUtils.info("Added new valid syntax matcher {} because it matches {} so far", syntax, status.token);
+                    newValidSyntaxes.add(syntax);
                 }
                 case MATCHES_EXACT -> {
-                    LogUtils.info("Added new exact and valid syntax matcher {} because it matches {} so far", syntaxParser, status.token);
-                    newValidParsers.add(syntaxParser);
-                    newExactParsers.add(syntaxParser);
+                    LogUtils.info("Added new exact and valid syntax matcher {} because it matches {} so far", syntax, status.token);
+                    newValidSyntaxes.add(syntax);
+                    newExactSyntaxes.add(syntax);
                 }
             }
         }
-        status.currentValidParsers = newValidParsers;
-        status.currentExactParsers = newExactParsers;
+
+        throwIfNoNextValidSyntaxes(newValidSyntaxes);
+
+        status.currentValidSyntaxes = newValidSyntaxes;
+        status.currentExactSyntaxes = newExactSyntaxes;
     }
 
-    private void handleExpectedMatchers(DeclaredNode context) {
-        if (status.nextExpectedParsers.size() == 0) return;
-
-        List<SyntaxParser> newValidExpectedParsers = new ArrayList<>();
-
-        for (SyntaxParser expectedParser : status.nextExpectedParsers) {
-            SyntaxParser.Result matchResult = expectedParser.matchNext(context, status, status.token);
-
-            if (matchResult == SyntaxParser.Result.MATCHES_EXACT) {
-                status.nextExpectedParsers.clear();
-                reset();
-                return;
-            } else if (matchResult == SyntaxParser.Result.MATCHES_SO_FAR) {
-                newValidExpectedParsers.add(expectedParser);
-            }
-        }
-
-        if (newValidExpectedParsers.size() == 0)
-            throw new CompilationException("Actual syntax '" + status.tokenBuffer + "' does not match any expected syntax:\n" +
-                    status.nextExpectedParsers.stream()
-                            .map(syntaxParser -> syntaxParser.getExpectedPatterns().stream().map(Arrays::toString).toList())
-                            .toList());
-
-        status.nextExpectedParsers = newValidExpectedParsers;
-    }
-
-    private void handleMatchers(DeclaredNode context) {
-        throwIfNoValidMatchers(context);
-
-        if (status.currentExactParsers.size() > 1) {
-            throw new IllegalStateException("Encountered multiple syntax matchers matching pattern '" + status.tokenBuffer + "', \n" + status.currentExactParsers);
-        } else if (status.currentExactParsers.size() == 1) {
-            SyntaxParser syntaxParser = status.currentExactParsers.get(0);
-            LogUtils.info("Found exact matching matcher {}", syntaxParser);
-
-            handleExactMatcher(context, syntaxParser);
-
-            reset();
+    private void throwIfNoNextValidSyntaxes(List<Syntax> newValidSyntaxes) {
+        if (newValidSyntaxes.size() == 0) {
+            throw new UnknownSyntaxException(status.currentValidSyntaxes, status.tokenBuffer);
         }
     }
 
-    private void handleExactMatcher(DeclaredNode context, SyntaxParser syntaxMatcher) {
+    private void handleSyntaxes(DeclaredNode context) {
+        throwIfNoValidSyntaxes(context);
 
-        status.nextExpectedParsers = syntaxMatcher.getNextExpectedPatterns();
+        if (status.currentExactSyntaxes.size() > 1) {
+            throw new IllegalStateException("Encountered multiple syntax matchers matching pattern '" + status.tokenBuffer + "', \n" + status.currentExactSyntaxes);
+        } else if (status.currentExactSyntaxes.size() == 1) {
+            Syntax syntax = status.currentExactSyntaxes.get(0);
+            LogUtils.info("Found exact syntax {}", syntax);
 
-        if (syntaxMatcher instanceof DeclarationSyntaxParser declarationSyntaxMatcher) {
+            handleExactSyntax(context, syntax);
 
-            LogUtils.info("exact pattern index: {}", declarationSyntaxMatcher.getExactMatchingInputPatternIndex());
+        }
+    }
+
+    private void handleExactSyntax(DeclaredNode context, Syntax syntax) {
+
+        status.reset();
+
+        status.currentValidSyntaxes = syntax.getNextExpectedSyntaxes();
+
+        if (syntax instanceof DeclarationSyntax declarationSyntaxMatcher) {
 
             DeclaredNode newToken = (DeclaredNode) declarationSyntaxMatcher.create(context);
             context.addNode(declarationSyntaxMatcher.getOperationType(), newToken);
-
-            reset();
             if (declarationSyntaxMatcher.hasBody()) {
                 parseInContext(newToken);
             }
 
-        } else if (syntaxMatcher instanceof ClosingSymbolSyntaxParser) {
+        } else if (syntax instanceof ClosingSymbolSyntax) {
 
         } else {
-            LogUtils.warn("SyntaxMatcher without use: {}", syntaxMatcher);
+            LogUtils.warn("Unused Syntax: {}", syntax);
         }
     }
 
-    private void throwIfNoValidMatchers(DeclaredNode context) {
-        if (status.currentValidParsers.size() == 0) {
-
+    private void throwIfNoValidSyntaxes(DeclaredNode context) {
+        if (status.currentValidSyntaxes.size() == 0) {
             throw new CompilationException("Unknown syntax " + status.tokenBuffer + " in " + context.getClass().getSimpleName() + " context");
-
         }
     }
 
     @NotNull
-    private static List<SyntaxParser> createNewParsers() {
+    private static List<Syntax> createNewSyntaxes() {
         return allMatcherConstructors.stream().map(Supplier::get).collect(Collectors.toList());
     }
 

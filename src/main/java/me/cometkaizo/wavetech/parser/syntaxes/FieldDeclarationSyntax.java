@@ -1,4 +1,4 @@
-package me.cometkaizo.wavetech.parser.syntaxparseres;
+package me.cometkaizo.wavetech.parser.syntaxes;
 
 import me.cometkaizo.wavetech.lexer.tokens.Token;
 import me.cometkaizo.wavetech.lexer.tokens.types.ObjectType;
@@ -6,6 +6,9 @@ import me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveType;
 import me.cometkaizo.wavetech.lexer.tokens.types.PropertyModifier;
 import me.cometkaizo.wavetech.lexer.tokens.types.VisibilityModifier;
 import me.cometkaizo.wavetech.parser.Parser;
+import me.cometkaizo.wavetech.parser.syntaxes.nodes.ConditionalSyntaxNodeBuilder;
+import me.cometkaizo.wavetech.parser.syntaxes.nodes.Syntax;
+import me.cometkaizo.wavetech.parser.syntaxes.nodes.TokenTypeSyntaxNodeBuilder;
 import me.cometkaizo.wavetech.parser.nodes.*;
 
 import java.util.List;
@@ -18,36 +21,32 @@ import static me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveType.VOID;
 import static me.cometkaizo.wavetech.lexer.tokens.types.PropertyModifier.*;
 import static me.cometkaizo.wavetech.lexer.tokens.types.VisibilityModifier.*;
 
-public class FieldDeclarationSyntaxParser extends DeclarationSyntaxParser {
+public class FieldDeclarationSyntax extends DeclarationSyntax {
 
-    public FieldDeclarationSyntaxParser() {
-        addExpectedSyntax(
-                new AnyMatcher(true, PUBLIC, PROTECTED, PACKAGE_PRIVATE, PRIVATE),
-                new AnyMatcher(true, STATIC),
-                new AnyMatcher(true, FINAL, VOLATILE),
-                new AnyMatcher(true, TRANSIENT),
-                new TokenTypeTransformationMatcher(ObjectType.SYMBOL_OR_REFERENCE, ObjectType.REFERENCE),
-                new TokenTypeTransformationMatcher(ObjectType.SYMBOL_OR_REFERENCE, ObjectType.SYMBOL)
-        );
-        addExpectedSyntax(
-                new AnyMatcher(true, PUBLIC, PROTECTED, PACKAGE_PRIVATE, PRIVATE),
-                new AnyMatcher(true, STATIC),
-                new AnyMatcher(true, FINAL, VOLATILE),
-                new AnyMatcher(true, TRANSIENT),
-                new PredicateAnyMatcher(o -> o.getType() instanceof PrimitiveType && o.getType() != VOID),
-                new TokenTypeTransformationMatcher(SYMBOL_OR_REFERENCE, SYMBOL)
-        );
+    public FieldDeclarationSyntax() {
+
+        rootNode
+                .split(null, PUBLIC, PROTECTED, PACKAGE_PRIVATE, PRIVATE)
+                .split(null, STATIC)
+                .split(null, FINAL, VOLATILE)
+                .split(
+                        new TokenTypeSyntaxNodeBuilder(SYMBOL_OR_REFERENCE, REFERENCE)
+                                .then(SYMBOL_OR_REFERENCE, SYMBOL),
+                        new ConditionalSyntaxNodeBuilder(token -> token.getType() instanceof PrimitiveType && token.getType() != VOID)
+                                .then(SYMBOL_OR_REFERENCE, SYMBOL)
+                )
+        ;
 
         addNextExpectedSyntax(
-                new SyntaxParser() {
+                new Syntax() {
                     {
-                        addExpectedSyntax(
+                        rootNode.then(
                                 SEMICOLON
                         );
                     }
 
                     @Override
-                    protected boolean isValidInStatus(Parser.ParserStatus status) {
+                    protected boolean isValidInStatus(Parser.Status status) {
                         return true;
                     }
 
@@ -61,7 +60,7 @@ public class FieldDeclarationSyntaxParser extends DeclarationSyntaxParser {
 
     @Override
     public Node create(DeclaredNode containingToken) {
-        var inputs = getExactMatchingInputPattern();
+        var inputs = getInputTokens();
 
         List<Token> visibilityModifierList = inputs.get(VisibilityModifier.class);
         VisibilityModifier visibilityModifier = visibilityModifierList == null ?
@@ -107,10 +106,8 @@ public class FieldDeclarationSyntaxParser extends DeclarationSyntaxParser {
         return false;
     }
 
-
-
     @Override
-    protected boolean isValidInStatus(Parser.ParserStatus status) {
+    protected boolean isValidInStatus(Parser.Status status) {
         return true;
     }
 
@@ -118,4 +115,6 @@ public class FieldDeclarationSyntaxParser extends DeclarationSyntaxParser {
     protected boolean isValidInContext(DeclaredNode context) {
         return context instanceof ClassNode;
     }
+
+
 }

@@ -58,7 +58,9 @@ public class FieldNode extends MemberNode {
                 ",modifiers=" + propertyModifiers +
                 ",type=" + type +
                 ",propertyDeclarations=" + propertyDeclarations +
-                ",tokens=" + tokens.stream().map(Object::toString).collect(Collectors.joining(",\n", "[", "]")) +
+                ",nodes=" + nodes.stream()
+                        .map(binaryNode -> binaryNode.toString().indent(2))
+                        .collect(Collectors.joining(",\n", "[", "]")) +
                 '}';
     }
 }

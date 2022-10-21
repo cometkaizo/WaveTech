@@ -23,7 +23,7 @@ public abstract class DeclaredNode extends Node {
     protected final Set<PropertyModifier> propertyModifiers;
     @NotNull
     protected final Set<PropertyDeclaration> propertyDeclarations;
-    protected final List<BinaryNode<?>> tokens = new ArrayList<>();
+    protected final List<BinaryNode<?>> nodes = new ArrayList<>();
 
     protected DeclaredNode(DeclaredNode containingToken, VisibilityModifier visibilityModifier, @NotNull Set<PropertyModifier> propertyModifiers, String name, @NotNull Set<PropertyDeclaration> propertyDeclarations) {
 
@@ -61,22 +61,24 @@ public abstract class DeclaredNode extends Node {
     protected abstract void throwIfInvalidVisibility();
 
     public <T> void addNode(NodeType type, T value) {
-        tokens.add(new BinaryNode<>(type, value));
+        nodes.add(new BinaryNode<>(type, value));
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + "{\n" +
-                "name=" + name +
+                "  name=" + name +
                 ",visibility=" + visibilityModifier +
                 ",modifiers=" + propertyModifiers +
                 ",propertyDeclarations=" + propertyDeclarations +
-                "\n,tokens=" + tokens.stream().map(Object::toString).collect(Collectors.joining(",\n", "[\n", "\n]")) +
-                "\n}";
+                ",\n  nodes=[\n" + nodes.stream()
+                        .map(node -> node.toString().indent(4))
+                        .collect(Collectors.joining(",\n")) +
+                "  ]\n}";
     }
 
-    public List<BinaryNode<?>> getTokens() {
-        return tokens;
+    public List<BinaryNode<?>> getNodes() {
+        return nodes;
     }
 
     public VisibilityModifier getVisibilityModifier() {
