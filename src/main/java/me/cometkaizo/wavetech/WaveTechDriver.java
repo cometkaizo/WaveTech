@@ -25,7 +25,10 @@ public class WaveTechDriver extends SystemDriver {
                     try {
                         app.parseInput(scanner.nextLine());
                     } catch (Exception e) {
-                        LogUtils.report(e, "");
+                        LogUtils.report(e, "Encountered exception");
+                    } catch (Throwable t) {
+                        LogUtils.fatal(t, "Encountered fatal exception");
+                        throw t;
                     }
                 }
             }

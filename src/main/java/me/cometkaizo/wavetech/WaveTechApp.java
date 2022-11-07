@@ -15,7 +15,7 @@ public class WaveTechApp extends App {
         Objects.requireNonNull(input, "Input cannot be null");
         if (input.isBlank()) return;
 
-        String[] parts = input.split(" ");
+        String[] parts = input.trim().split(" ");
         if (parts.length == 0) return;
 
         String command = parts[0];

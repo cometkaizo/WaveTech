@@ -13,12 +13,12 @@ public class RunLock {
 
     public RunLock(Predicate<Object> condition) {
         this.condition = condition;
-        this.id = Util.getCallerTrace();
+        this.id = Utils.getCallerTrace();
     }
 
     public RunLock() {
         this.condition = null;
-        this.id = Util.getCallerTrace();
+        this.id = Utils.getCallerTrace();
     }
 
     public void run(Object subject, Runnable task) {

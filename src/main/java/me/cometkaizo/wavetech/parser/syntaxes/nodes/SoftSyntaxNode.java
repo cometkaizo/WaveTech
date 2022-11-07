@@ -7,6 +7,8 @@ import me.cometkaizo.wavetech.lexer.tokens.Token;
  */
 abstract class SoftSyntaxNode extends SyntaxNode {
 
+    protected final int hashCode = (int) (Math.random() * 100 * 31 * getClass().hashCode());
+
     protected SoftSyntaxNode(SoftSyntaxNodeBuilder builder) {
         super(builder);
     }
@@ -22,4 +24,14 @@ abstract class SoftSyntaxNode extends SyntaxNode {
     }
 
     protected abstract boolean accepts();
+
+    @Override
+    public boolean equals(Object o) {
+        return this == o;
+    }
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
 }

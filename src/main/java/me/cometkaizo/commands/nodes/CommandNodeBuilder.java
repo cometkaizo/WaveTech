@@ -2,14 +2,14 @@ package me.cometkaizo.commands.nodes;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class CommandNodeBuilder {
 
     protected int level;
-    protected final Set<CommandNodeBuilder> subNodes = new LinkedHashSet<>(0);
-    protected final Set<Runnable> tasks = new LinkedHashSet<>(0);
+    protected final List<CommandNodeBuilder> subNodes = new ArrayList<>(0);
+    protected final List<Runnable> tasks = new ArrayList<>(0);
     private boolean splits = false;
     /**
      * Represents the last node of our line of nodes. When a line splits and merges again, {@code focus} will be the merged node.

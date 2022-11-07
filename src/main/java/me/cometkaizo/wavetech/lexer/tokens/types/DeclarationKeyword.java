@@ -10,13 +10,13 @@ public enum DeclarationKeyword implements TokenType {
     ENUM("enum"),
     RECORD("record");
 
-    private final String symbol;
+    private final String[] symbols;
 
-    DeclarationKeyword(String symbol) {
-        this.symbol = symbol;
+    DeclarationKeyword(String... symbols) {
+        this.symbols = symbols;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String[] symbolSeq() {
+        return symbols;
     }
 }

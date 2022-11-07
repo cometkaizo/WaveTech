@@ -2,11 +2,14 @@ package me.cometkaizo.wavetech.parser.syntaxes.nodes;
 
 import me.cometkaizo.util.LogUtils;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.Function;
 
 class ConditionalSyntaxNode extends SyntaxNode {
 
+    @NotNull
     protected final Function<Token, Boolean> condition;
 
     public ConditionalSyntaxNode(ConditionalSyntaxNodeBuilder builder) {
@@ -35,5 +38,18 @@ class ConditionalSyntaxNode extends SyntaxNode {
                 ConditionalCommandNode{
                     condition: {},
                 }""", condition);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ConditionalSyntaxNode that = (ConditionalSyntaxNode) o;
+        return condition.equals(that.condition);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(condition);
     }
 }

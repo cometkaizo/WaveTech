@@ -1,12 +1,8 @@
 package me.cometkaizo.commands.nodes;
 
-import me.cometkaizo.commands.exceptions.CommandSyntaxException;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -23,18 +19,20 @@ import java.util.stream.Collectors;
 abstract class CommandNode {
 
     protected final int level;
-    protected final Set<CommandNode> subNodes;
-    protected final Set<Runnable> tasks;
+    protected final List<CommandNode> subNodes;
+    protected final List<Runnable> tasks;
     protected Command context;
 
     protected CommandNode(CommandNodeBuilder builder) {
         this.subNodes = buildSubNodes(builder);
-        this.tasks = builder.tasks;
+        this.tasks = List.of(builder.tasks.toArray(Runnable[]::new));
         this.level = builder.level;
     }
-    private static Set<CommandNode> buildSubNodes(CommandNodeBuilder builder) {
-        return  builder.subNodes.stream()
-                .map(CommandNodeBuilder::build).collect(Collectors.toCollection(LinkedHashSet::new));
+    private static List<CommandNode> buildSubNodes(CommandNodeBuilder builder) {
+        List<CommandNode> result = builder.subNodes.stream()
+                .map(CommandNodeBuilder::build)
+                .collect(Collectors.toCollection(ArrayList::new));
+        return List.of(result.toArray(CommandNode[]::new));
     }
 
 
@@ -65,8 +63,21 @@ abstract class CommandNode {
         if (hasNextArg())
             executeSubNodesWithNextArg();
         else {
-            if (requiresNextArg()) throw new CommandSyntaxException("Unexpected end of arguments: \n" + Arrays.toString(context.args) + ", \nsubNodes: " + subNodes);
-            else executeNoArgSubNode();
+            if (requiresNextArg()) {
+                String formattedArgs = Arrays.stream(context.args)
+                        .map(Objects::toString)
+                        .collect(Collectors.joining(" "));
+
+                throw new CommandSyntaxException(
+                        "Unexpected end of arguments: \n\t" +
+                                formattedArgs + "\n" +
+                                " ".repeat(formattedArgs.length()) + "^\n" +
+                                "subNodes: \n" +
+                                subNodes.stream()
+                                        .map(Objects::toString)
+                                        .collect(Collectors.joining("\n"))
+                );
+            } else executeNoArgSubNode();
         }
     }
 

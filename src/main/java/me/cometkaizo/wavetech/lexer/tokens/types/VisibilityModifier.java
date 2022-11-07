@@ -3,18 +3,25 @@ package me.cometkaizo.wavetech.lexer.tokens.types;
 import me.cometkaizo.wavetech.lexer.tokens.TokenType;
 
 public enum VisibilityModifier implements TokenType {
-    PUBLIC("public"),
-    PROTECTED("protected"),
-    PACKAGE_PRIVATE(""),
-    PRIVATE("private");
+    PUBLIC(3, "public"),
+    PROTECTED(2, "protected"),
+    PACKAGE_PRIVATE(1, ""),
+    PRIVATE(0, "private");
 
-    private final String symbol;
+    private final String[] symbols;
+    private final int power;
 
-    VisibilityModifier(String symbol) {
-        this.symbol = symbol;
+    VisibilityModifier(int power, String... symbols) {
+        this.symbols = symbols;
+        this.power = power;
     }
 
-    public String getSymbol() {
-        return symbol;
+    @Override
+    public String[] symbolSeq() {
+        return symbols;
+    }
+
+    public int power() {
+        return power;
     }
 }

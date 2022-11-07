@@ -14,7 +14,9 @@ public abstract class MemberNode extends DeclaredNode {
 
     @Override
     protected VisibilityModifier getEffectiveVisibility() {
-        return containingToken.effectiveVisibilityModifier;
+        if (containingToken.effectiveVisibilityModifier.power() < visibilityModifier.power())
+            return containingToken.effectiveVisibilityModifier;
+        return visibilityModifier;
     }
 
 }

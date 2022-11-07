@@ -44,12 +44,12 @@ public class LineReader {
                 wordLines.add(lineIndex + 1);
                 wordCols.add(charIndex + 1);
 
-                if (!Keywords.isPrimitiveOperator(currentChar)) {
+                if (!Keywords.isPrimitiveOperator(String.valueOf(currentChar))) {
 
                     boolean hasNextChar = charIndex < line.length() - 1;
                     char nextChar = hasNextChar ? line.charAt(charIndex + 1) : ' ';
 
-                    while (hasNextChar && !Character.isWhitespace(nextChar) && !Keywords.isPrimitiveOperator(nextChar)) {
+                    while (hasNextChar && !Character.isWhitespace(nextChar) && !Keywords.isPrimitiveOperator(String.valueOf(nextChar))) {
                         wordBuilder.append(nextChar);
 
                         charIndex++;
@@ -76,11 +76,35 @@ public class LineReader {
         }
     }
 
-    public boolean hasNextWord() {
+    public boolean hasNext() {
         return currentWordIndex < words.size() - 1;
     }
     public boolean hasNextChar() {
-        return currentCharIndex < currentWord.length() - 1 || hasNextWord();
+        return currentCharIndex < currentWord.length() - 1 || hasNext();
+    }
+    public boolean hasNext(int amt) {
+        return currentWordIndex + amt >= -1
+                && currentWordIndex + amt < words.size() - 1;
+    }
+    public boolean hasNextChar(int amt) {
+        if (currentCharIndex + amt < -1)
+            return false;
+
+        String _currentWord = currentWord;
+        int _charIndex = currentCharIndex;
+        int wordsChecked = 0;
+
+        while (_charIndex + amt >= _currentWord.length()) {
+
+            amt -= _currentWord.length() - _charIndex;
+            if (!hasNext(wordsChecked)) {
+                return false;
+            }
+
+            _charIndex = 0;
+        }
+
+        return true;
     }
 
     public char nextChar() {
@@ -88,40 +112,41 @@ public class LineReader {
         return currentChar;
     }
 
-    public String nextWord() {
-
-        if (!hasNextWord()) throw new IllegalStateException("No next word to get");
-
-        return words.get(++currentWordIndex);
+    public String next() {
+        advanceWord();
+        return currentWord;
     }
 
     public String peekWord() {
         return peekWord(1);
     }
-    public String peekWord(int amount) {
-        if (!hasNextWord()) throw new IllegalStateException("No word to peek");
-        return words.get(currentWordIndex + amount);
+    public String peekWord(int amt) {
+        if (!hasNext(amt - 1)) throw new IllegalStateException("No word to peek at index " + currentWordIndex + " + amount " + amt);
+        return words.get(currentWordIndex + amt);
 
     }
-    public char peek() {
-        return peek(1);
+    public char peekChar() {
+        return peekChar(1);
     }
-    public char peek(int amount) {
-        if (!hasNextChar()) throw new IllegalStateException("No char to peek");
+    public char peekChar(int amt) {
+        if (!hasNextChar(amt)) throw new IllegalStateException("No char to peek at index " + currentCharIndex + " + amount " + amt);
 
-        int amountLeft = amount;
+        int amountLeft = amt;
         int _charIndex = currentCharIndex;
         String _currentWord = currentWord;
+        int wordsChecked = 0;
 
         while (_charIndex + amountLeft >= _currentWord.length()) {
 
             amountLeft -= _currentWord.length() - _charIndex;
 
-            if (!hasNextWord()) {
-                throw new IllegalStateException("No char to peek at amount " + amount);
+            if (!hasNext(wordsChecked)) {
+                throw new IllegalStateException("No char to peek at amount " + amt);
             }
+
             _currentWord = peekWord();
             _charIndex = 0;
+            wordsChecked ++;
         }
 
         return _currentWord.charAt(_charIndex + amountLeft);
@@ -137,8 +162,26 @@ public class LineReader {
         currentChar = currentWord.charAt(currentCharIndex);
     }
     public void advanceWord() {
-        if (!hasNextWord()) throw new IllegalStateException("No word to advance at end of file");
+        if (!hasNext()) throw new IllegalStateException("No word to advance at end of file");
         currentWordIndex ++;
+        currentCharIndex = 0;
+
+        currentWord = words.get(currentWordIndex);
+    }
+
+    public void advanceChar(int amt) {
+        if (!hasNextChar(amt - 1)) throw new IllegalStateException("No char to advance at end of file");
+        currentCharIndex += amt;
+
+        while (currentCharIndex >= currentWord.length()) {
+            advanceWord();
+        }
+
+        currentChar = currentWord.charAt(currentCharIndex);
+    }
+    public void advanceWord(int amt) {
+        if (!hasNext(amt - 1)) throw new IllegalStateException("No word to advance at end of file");
+        currentWordIndex += amt;
         currentCharIndex = 0;
 
         currentWord = words.get(currentWordIndex);
@@ -148,15 +191,15 @@ public class LineReader {
         return words.get(currentWordIndex).charAt(currentCharIndex);
     }
 
+    public String currentWord() {
+        return words.get(currentWordIndex);
+    }
+
     public int getLine() {
         return wordLines.get(currentWordIndex);
     }
 
     public int getCol() {
         return wordCols.get(currentWordIndex);
-    }
-
-    public String currentWord() {
-        return words.get(currentWordIndex);
     }
 }

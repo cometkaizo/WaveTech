@@ -1,6 +1,6 @@
 package me.cometkaizo.wavetech.parser.syntaxes.nodes;
 
-public class RootSyntaxNodeBuilder extends SyntaxNodeBuilder {
+public class RootSyntaxNodeBuilder extends SoftSyntaxNodeBuilder {
 
     public RootSyntaxNodeBuilder(Syntax context) {
         this.syntax = context;

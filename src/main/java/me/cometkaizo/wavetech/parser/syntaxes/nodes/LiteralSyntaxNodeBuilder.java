@@ -8,22 +8,23 @@ import java.util.function.Function;
 
 public class LiteralSyntaxNodeBuilder extends SyntaxNodeBuilder {
 
+    @NotNull
     protected final Token expected;
     @NotNull
     protected final Function<Token, Token> transformation;
 
-    public LiteralSyntaxNodeBuilder(Token expected) {
+    public LiteralSyntaxNodeBuilder(@NotNull Token expected) {
         this.expected = expected;
         this.transformation = token -> token;
     }
-    public LiteralSyntaxNodeBuilder(Token expected, @NotNull Function<Token, Token> transformation) {
+    public LiteralSyntaxNodeBuilder(@NotNull Token expected, @NotNull Function<Token, Token> transformation) {
         this.expected = expected;
         this.transformation = transformation;
     }
 
     @Override
-    protected LiteralSyntaxNode build() {
-        return new LiteralSyntaxNode(this);
+    protected TokenSyntaxNode build() {
+        return new TokenSyntaxNode(this);
     }
 
     @Override

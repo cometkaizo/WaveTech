@@ -23,7 +23,7 @@ public abstract class DeclaredNode extends Node {
     protected final Set<PropertyModifier> propertyModifiers;
     @NotNull
     protected final Set<PropertyDeclaration> propertyDeclarations;
-    protected final List<BinaryNode<?>> nodes = new ArrayList<>();
+    protected final List<Node> nodes = new ArrayList<>();
 
     protected DeclaredNode(DeclaredNode containingToken, VisibilityModifier visibilityModifier, @NotNull Set<PropertyModifier> propertyModifiers, String name, @NotNull Set<PropertyDeclaration> propertyDeclarations) {
 
@@ -60,8 +60,8 @@ public abstract class DeclaredNode extends Node {
     protected abstract void throwIfInvalidPropertyDeclaration();
     protected abstract void throwIfInvalidVisibility();
 
-    public <T> void addNode(NodeType type, T value) {
-        nodes.add(new BinaryNode<>(type, value));
+    public void addNode(Node node) {
+        nodes.add(node);
     }
 
     @Override
@@ -73,11 +73,11 @@ public abstract class DeclaredNode extends Node {
                 ",propertyDeclarations=" + propertyDeclarations +
                 ",\n  nodes=[\n" + nodes.stream()
                         .map(node -> node.toString().indent(4))
-                        .collect(Collectors.joining(",\n")) +
+                        .collect(Collectors.joining("    ,\n")) +
                 "  ]\n}";
     }
 
-    public List<BinaryNode<?>> getNodes() {
+    public List<Node> getNodes() {
         return nodes;
     }
 

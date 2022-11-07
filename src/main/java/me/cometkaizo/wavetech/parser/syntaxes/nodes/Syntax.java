@@ -1,16 +1,17 @@
 package me.cometkaizo.wavetech.parser.syntaxes.nodes;
 
+import me.cometkaizo.util.LogUtils;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
 import me.cometkaizo.wavetech.lexer.tokens.TokenType;
 import me.cometkaizo.wavetech.parser.Parser;
 import me.cometkaizo.wavetech.parser.nodes.DeclaredNode;
 import me.cometkaizo.wavetech.parser.nodes.Node;
+import me.cometkaizo.wavetech.parser.syntaxes.visitors.EmptyParserVisitor;
+import me.cometkaizo.wavetech.parser.syntaxes.visitors.ParserStatusVisitor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * The Syntax class represents a way to parse a series of tokens into {@link Node}s.
@@ -23,15 +24,15 @@ import java.util.Map;
 public abstract class Syntax {
 
     protected RootSyntaxNodeBuilder rootNode = new RootSyntaxNodeBuilder(this);
-    protected boolean success = true;
+    @NotNull
     private List<SyntaxNode> currentNodes = new ArrayList<>();
     final Map<Class<? extends TokenType>, List<Token>> inputTokens = new HashMap<>();
-    private final List<Syntax> nextExpectedPatterns = new ArrayList<>();
+    @NotNull
+    private final List<Syntax> nextExpectedSyntaxes = new ArrayList<>();
     private RootSyntaxNode builtRoot;
+    final List<SyntaxNode> route = new ArrayList<>();
 
-    public boolean getSuccess() {
-        return success;
-    }
+
 
     public Map<Class<? extends TokenType>, List<Token>> getInputTokens() {
         return inputTokens;
@@ -41,55 +42,94 @@ public abstract class Syntax {
     }
 
     protected final void addNextExpectedSyntax(Syntax nextSyntax) {
-        nextExpectedPatterns.add(nextSyntax);
+        nextExpectedSyntaxes.add(nextSyntax);
     }
 
+    @NotNull
     public final List<Syntax> getNextExpectedSyntaxes() {
-        return nextExpectedPatterns;
+        return nextExpectedSyntaxes;
     }
 
+    @NotNull
     public List<SyntaxNode> getExpectedPatterns() {
         return currentNodes;
     }
 
-    public SyntaxNode getRoot() {
+    @NotNull
+    public SyntaxNode getRootOrBuild() {
+        if (builtRoot == null) builtRoot = rootNode.build();
         return builtRoot;
+    }
+
+    public ParserStatusVisitor createVisitor(DeclaredNode containingToken) {
+        return new EmptyParserVisitor();
     }
 
     public enum Result {
 
-        NO_RESULT,
+        NO_MATCH,
         MATCHES_SO_FAR,
         MATCHES_EXACT
 
     }
 
-    public final Result matchNext(@NotNull DeclaredNode context, @NotNull Parser.Status status, @NotNull Token nextToken) {
-        if (!isValidInContext(context)) return Result.NO_RESULT;
-        if (!isValidInStatus(status)) return Result.NO_RESULT;
+    public final Result matchNext(@NotNull Token token,
+                                  @Nullable Token nextToken,
+                                  @NotNull DeclaredNode context,
+                                  @NotNull Parser.Status status) {
+        if (!isValidInContext(context)) return Result.NO_MATCH;
+        if (!isValidInStatus(status)) return Result.NO_MATCH;
         if (currentNodes.size() == 0) {
-            builtRoot = rootNode.build();
-            currentNodes.add(builtRoot);
+            currentNodes.add(getRootOrBuild());
         }
 
-        Result matchResult = Result.NO_RESULT;
+        Result matchResult = Result.NO_MATCH;
 
         List<SyntaxNode> nextNodes = new ArrayList<>(currentNodes.size());
 
         for (SyntaxNode node : currentNodes) {
-            SyntaxNode nextNode = node.getSubNodeMatching(nextToken);
+            SyntaxNode.MatchResult nodeMatchResult = node.getNextNodeMatching(token, nextToken, context, status);
+            LogUtils.warn("syntax {}\nnodeMatchResult: {}, node: {}, token: {}, peeking: {}",
+                    getClass().getName(),
+                    nodeMatchResult,
+                    node.representData(),
+                    token,
+                    nextToken);
 
-            if (nextNode != null && !nextNode.hasTokenAcceptingSubNodes()) {
+            SyntaxNode nextNode = nodeMatchResult.nextNode();
+            SyntaxNode subNode = nodeMatchResult.subNode();
+            Result success = nodeMatchResult.result();
+            if (nextNodes.contains(nextNode)) continue;
+
+            if (success == Result.NO_MATCH)
+                continue;
+
+
+            if (success == Result.MATCHES_EXACT) {
+                if (subNode instanceof LoopingSyntaxNode looper && !route.contains(looper) || subNode != null) {
+                    LogUtils.success("current {} syntax {} is running tasks \n{}\n for {}; it matches exact", node.representData(), getClass().getSimpleName(), nextNode.tasks, nextNode.representData());
+                    subNode.runTasks();
+                }
+                if (!route.contains(nextNode)) route.add(nextNode);
                 return Result.MATCHES_EXACT;
             }
-            if (nextNode != null && nextNode.hasTokenAcceptingSubNodes()) {
+
+            if (success == Result.MATCHES_SO_FAR) {
+                if (subNode instanceof LoopingSyntaxNode looper && !route.contains(looper) || subNode != null) {
+                    LogUtils.success("current {} syntax {} is running tasks \n{}\n for {}; it matches so far", node.representData(), getClass().getSimpleName(), nextNode.tasks, nextNode.representData());
+                    subNode.runTasks();
+                }
+
                 nextNodes.add(nextNode);
+                if (!route.contains(nextNode)) route.add(nextNode);
+
                 matchResult = Result.MATCHES_SO_FAR;
+                // TODO: 2022-10-27 add "nextNode.runTasksOnSuccess()" here
             }
+
         }
 
         currentNodes = nextNodes;
-        //LogUtils.debug("result: {}, current nodes now: {}", matchResult, currentNodes);
         return matchResult;
     }
 

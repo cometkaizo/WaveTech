@@ -16,14 +16,14 @@ public enum PrimitiveValue implements TokenType {
     NULL("null");
 
 
-    private final String symbol;
+    private final String[] symbols;
 
-    PrimitiveValue(String symbol) {
-        this.symbol = symbol;
+    PrimitiveValue(String... symbols) {
+        this.symbols = symbols;
     }
 
     @Override
-    public String getSymbol() {
-        return symbol;
+    public String[] symbolSeq() {
+        return symbols;
     }
 }

@@ -4,137 +4,192 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5d3c246e-1a2d-4af1-ad28-3d1b72810b24" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/arguments/Argument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/arguments/BooleanArgument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/arguments/DoubleArgument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/arguments/IntArgument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/arguments/ObjectArgument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/arguments/StringArgument.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/exceptions/CommandSyntaxException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/ArgumentCommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/ArgumentCommandNodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/Command.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/CommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/CommandNodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/ConditionalCommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/ConditionalCommandNodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/EmptyCommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/EmptyCommandNodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/LiteralCommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/LiteralCommandNodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/RootCommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/RootCommandNodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/SoftCommandNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/SoftCommandNodeBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/exceptions/DeliberateUncloneableException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/keywords.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/lexer.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/parser.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/pseudo.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/system/Constants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/system/Defaults.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/system/app/App.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/system/app/AppSettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/system/driver/SystemDriver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ArrayUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ClassUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ConsoleColors.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ImageUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/JSONUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/LogLevel.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/LogUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/MapUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/MathUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/MethodUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/RunLock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/RunPeriodically.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/SerializeUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/StringUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/Util.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/Main.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/WaveTechApp.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/WaveTechAppSettings.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/WaveTechDriver.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/commands/CompileCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/commands/ExecuteCommand.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/CompilationException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/Lexer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/LineReader.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/BooleanTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/DeclarationKeywordTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/DoubleTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/IntegerTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/NullTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/PrimitiveOperatorTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/PropertyModifierTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/StringTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/StringTokenizers.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/SymbolTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/TypeKeywordTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/VisibilityModifierTokenizer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/Token.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/TokenType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/DeclarationKeyword.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/ExtendsPropertyDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/ImplementsPropertyDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/Keywords.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/ObjectType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PermitsPropertyDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveOperator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveValue.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PropertyDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PropertyModifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/SymbolType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/ThrowsPropertyDeclaration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/VisibilityModifier.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/IllegalTokenException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/Parser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/UnexpectedTokenException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/BinaryNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/ClassNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/DeclaredNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/FieldNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/MemberNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/Node.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/NodeType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/OperationTokenType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/SourceFileNode.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/ValueTokenType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/AnyMatcher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/ClassDeclarationSyntaxParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/ClosingSymbolSyntaxParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/DeclarationSyntaxParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/FieldDeclarationSyntaxParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/PredicateAnyMatcher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/SyntaxParser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/SyntaxParsers.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/TokenTypeTransformationMatcher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxparseres/TransformationMatcher.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/testsource/hello_world.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/testsource/illegal_keyword_patter.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/me/cometkaizo/wavetech/lexer/LexerTest.java" afterDir="false" />
+    <list default="true" id="5d3c246e-1a2d-4af1-ad28-3d1b72810b24" name="Changes" comment="Converted syntaxes to nodes">
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/annotations/Legacy.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/IllegalTokenException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/Parser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/UnexpectedTokenException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/BinaryOperationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/ClassDeclarationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/ClassNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/DeclaredNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/FieldDeclarationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/FieldNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/MemberNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/Node.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/OperationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/SourceFileNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/UnaryOperationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/nodes/VariableAssignationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/ClassDeclarationSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/DeclarationSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/ExpressionSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/FactorSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/FieldDeclarationSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/LeftBraceSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/LeftParenSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/MethodDeclarationSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/RightBraceSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/RightParenSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/SemicolonSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/Syntaxes.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/TermSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/VariableAssignationSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/ConditionalSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/ConditionalSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/EmptySyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/EmptySyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/LiteralSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/LoopingSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/LoopingSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/MatcherFunction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/RootSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/RootSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/SoftSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/SoftSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/Syntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/SyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/SyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/SyntaxSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/SyntaxSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/SyntaxToString.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/TokenSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/TokenTypeSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/TokenTypeSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/nodes/UnknownSyntaxException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/ClassDeclarationParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/ContainedParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/DeclarationParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/DepthDecreaseParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/DepthIncreaseParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/EmptyParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/FieldDeclarationParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/ParserStatusVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/temp/syntaxes/visitors/VariableAssignationParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/the_logs.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/LogFormatter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/Logger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/PeekingIterator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/WaveTechLogger.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/BinaryOperationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/ClassDeclarationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/FieldDeclarationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/OperationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/UnaryOperationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/VariableAssignationNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/ExpressionSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/FactorSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/LeftBraceSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/LeftParenSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/MethodDeclarationSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/RightParenSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/SemicolonSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/TermSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/VariableAssignationSyntax.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/LoopingSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/LoopingSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/MatcherFunction.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxSyntaxNode.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxSyntaxNodeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/UnknownSyntaxException.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/ClassDeclarationParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/ContainedParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/DeclarationParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/DepthDecreaseParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/DepthIncreaseParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/EmptyParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/FieldDeclarationParserVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/ParserStatusVisitor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/visitors/VariableAssignationParserVisitor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/exceptions/CommandSyntaxException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/CommandSyntaxException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/Command.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/Command.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/CommandNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/CommandNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/CommandNodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/commands/nodes/CommandNodeBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/exceptions/DeliberateUncloneableException.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/exceptions/DeliberateUncloneableException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/lexer.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/lexer.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/parser.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/parser.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ArrayUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ArrayUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ClassUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/ClassUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/LogUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/LogUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/RunLock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/RunLock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/StringUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/StringUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/Util.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/util/Utils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/WaveTechApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/WaveTechApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/WaveTechDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/WaveTechDriver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/commands/CompileCommand.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/commands/CompileCommand.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/Lexer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/Lexer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/LineReader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/LineReader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/BooleanTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/BooleanTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/DeclarationKeywordTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/DeclarationKeywordTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/DoubleTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/DoubleTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/IntegerTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/IntegerTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/NullTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/NullTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/PrimitiveOperatorTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/PrimitiveOperatorTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/PropertyModifierTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/PropertyModifierTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/StringTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/StringTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/StringTokenizers.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/StringTokenizers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/SymbolTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/SymbolTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/TypeKeywordTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/TypeKeywordTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/stringtokenizer/VisibilityModifierTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokenizer/VisibilityModifierTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/Token.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/Token.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/TokenType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/TokenType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/DeclarationKeyword.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/DeclarationKeyword.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/Keywords.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/Keywords.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/ObjectType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/ObjectType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveOperator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveOperator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PrimitiveValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PropertyModifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/PropertyModifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/VisibilityModifier.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/lexer/tokens/types/VisibilityModifier.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/Parser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/Parser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/UnknownSyntaxException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/BinaryNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/DeclaredNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/DeclaredNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/FieldNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/FieldNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/MemberNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/MemberNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/nodes/NodeType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/ClassDeclarationSyntax.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/ClassDeclarationSyntax.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/ClosingSymbolSyntax.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/RightBraceSyntax.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/DeclarationSyntax.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/DeclarationSyntax.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/FieldDeclarationSyntax.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/FieldDeclarationSyntax.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/Syntaxes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/Syntaxes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/ConditionalSyntaxNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/ConditionalSyntaxNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/ConditionalSyntaxNodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/ConditionalSyntaxNodeBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/LiteralSyntaxNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/TokenSyntaxNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/LiteralSyntaxNodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/LiteralSyntaxNodeBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/RootSyntaxNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/RootSyntaxNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/RootSyntaxNodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/RootSyntaxNodeBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SoftSyntaxNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SoftSyntaxNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/Syntax.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/Syntax.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxNodeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxNodeBuilder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxToString.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/SyntaxToString.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/TokenTypeSyntaxNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes/TokenTypeSyntaxNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/testsource/hello_world.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/testsource/hello_world.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/testsource/illegal_keyword_patter.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/me/cometkaizo/grammar.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/me/cometkaizo/wavetech/lexer/LexerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/me/cometkaizo/wavetech/lexer/LexerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+      <option value="module" />
+    </option>
+  </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JUnit5 Test Class" />
         <option value="Enum" />
+        <option value="JUnit5 Test Class" />
+        <option value="Interface" />
         <option value="Class" />
+        <option value="AnnotationType" />
       </list>
     </option>
   </component>
@@ -151,31 +206,39 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit5&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5&quot;: &quot;&quot;,
-    &quot;last.edited.regexp&quot;: &quot;&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/andyw/Dev/Java/WaveTech/src/main/java/me/cometkaizo/wavetech/lexer&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.Java&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit5",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5": "",
+    "last.edited.regexp": "",
+    "last_directory_selection": "E:/andyw/Dev/Java/WaveTech/src/main/java/me/cometkaizo/wavetech/parser/syntaxes/nodes",
+    "last_opened_file_path": "E:/andyw/Dev/Java/WaveTech/src/main/java/me/cometkaizo/temp",
+    "settings.editor.selected.configurable": "inlay.hints"
+  },
+  "keyToStringList": {
+    "ChangesTree.GroupingKeys": [
+      "directory",
+      "module"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
-      <recent name="me.cometkaizo.wavetech.parser.newsyntaxmatchers" />
-      <recent name="me.cometkaizo.wavetech.lexer.tokens.keywords" />
-      <recent name="me.cometkaizo.wavetech.parser" />
-      <recent name="me.cometkaizo.wavetech.lexer.tokens" />
-      <recent name="me.cometkaizo.wavetech.lexer.syntaxmatchers" />
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes.nodes" />
+      <recent name="me.cometkaizo.wavetech.parser.nodes" />
+      <recent name="me.cometkaizo.util" />
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes.visitors" />
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\wavetech\lexer" />
-      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\wavetech\parser" />
-      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\wavetech\lexer\stringparser" />
-      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo" />
+      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\temp" />
+      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\wavetech\parser\syntaxes" />
+      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\wavetech\ultratemp" />
+      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\wavetech\temp" />
+      <recent name="E:\andyw\Dev\Java\WaveTech\src\main\java\me\cometkaizo\wavetech\parser\syntax" />
     </key>
     <key name="MoveMembersDialog.RECENTS_KEY">
       <recent name="me.cometkaizo.wavetech.lexer.tokens.keywords.ObjectType" />
@@ -186,16 +249,23 @@
       <recent name="" />
     </key>
     <key name="MoveInnerDialog.RECENTS_KEY">
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes" />
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes.nodes" />
       <recent name="me.cometkaizo.wavetech.lexer" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes" />
+      <recent name="me.cometkaizo.wavetech" />
+    </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes.nodes" />
       <recent name="me.cometkaizo.wavetech.lexer" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="me.cometkaizo.wavetech.parser" />
-      <recent name="me.cometkaizo.wavetech.lexer.stringparser" />
-      <recent name="me.cometkaizo.exceptions" />
-      <recent name="me.cometkaizo.commands.exceptions" />
+      <recent name="me.cometkaizo.wavetech.parser.nodes" />
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes" />
+      <recent name="me.cometkaizo.wavetech.parser.syntaxes.visitors" />
+      <recent name="me.cometkaizo.wavetech.temp" />
       <recent name="me.cometkaizo.util" />
     </key>
   </component>
@@ -205,7 +275,7 @@
       <module name="WaveTech" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="me.cometkaizo.wavetech.lexer.stringtokenizer.*" />
+          <option name="PATTERN" value="me.cometkaizo.wavetech.lexer.tokenizer.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -228,6 +298,21 @@
       <option name="presentableId" value="Default" />
       <updated>1665502800283</updated>
     </task>
+    <task id="LOCAL-00001" summary="Just remembered to add to git lol">
+      <created>1666115395133</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1666115395133</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Converted syntaxes to nodes">
+      <created>1666312831102</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1666312831102</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -240,6 +325,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Just remembered to add to git lol" />
+    <MESSAGE value="Converted syntaxes to nodes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Converted syntaxes to nodes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

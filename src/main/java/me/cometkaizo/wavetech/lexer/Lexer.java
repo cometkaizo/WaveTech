@@ -1,10 +1,11 @@
 package me.cometkaizo.wavetech.lexer;
 
 import me.cometkaizo.util.LogUtils;
-import me.cometkaizo.wavetech.lexer.stringtokenizer.StringTokenizers;
-import me.cometkaizo.wavetech.lexer.stringtokenizer.StringTokenizer;
+import me.cometkaizo.wavetech.lexer.tokenizer.StringTokenizers;
+import me.cometkaizo.wavetech.lexer.tokenizer.StringTokenizer;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
 import me.cometkaizo.wavetech.lexer.tokens.types.Keywords;
+import me.cometkaizo.wavetech.lexer.tokens.types.ObjectType;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class Lexer {
 
     public List<Token> tokenize(File file) {
         throwIfInvalidFile(file);
+        tokens.add(new Token(ObjectType.SYMBOL, file.getName()));
 
         lineReader = new LineReader(file);
 
@@ -30,7 +32,7 @@ public class Lexer {
 
     private void tokenizeLines() {
 
-        while (lineReader.hasNextWord()) {
+        while (lineReader.hasNext()) {
             lineReader.advanceWord();
 
             readSymbol();
@@ -51,23 +53,28 @@ public class Lexer {
     }
 
     private void throwIfInvalidSymbol(String symbol) {
-        for (int i : symbol.chars().toArray()) {
-            throwIfInvalidChar((char) i);
+        LogUtils.debug("symbol {}", symbol);
+        for (int peekAmt = 0, len = symbol.length(); peekAmt < len; peekAmt++) {
+            throwIfInvalidChar(peekAmt);
         }
     }
 
-    private void throwIfInvalidChar(char c) {
-        if (!Keywords.isValidSymbolName(String.valueOf(c))
-                && !Keywords.isPrimitiveOperator(c)
-                && !Keywords.isNumber(c))
-            throw new CompilationException("Illegal character '" + c + "'", lineReader.getLine(), lineReader.getCol());
+    private void throwIfInvalidChar(int peekAmt) {
+        char peekedChar = lineReader.peekChar(peekAmt);
+
+        if (!Keywords.isValidSymbolName(String.valueOf(peekedChar))
+                && !Keywords.isAtPrimitiveOperator(lineReader)
+                && !Keywords.isNumber(peekedChar)) {
+            throw new CompilationException("Illegal character '" + peekedChar + "'", lineReader.getLine(), lineReader.getCol());
+        }
     }
 
     private static void throwIfInvalidFile(File file) {
         if (!file.exists() || file.isDirectory()) {
-            LogUtils.error("File does not exist or is directory exception");
             throw new IllegalArgumentException("File does not exist or is directory");
         }
+        if (file.getName().isBlank())
+            throw new IllegalArgumentException("Illegal name '" + file.getName() + "' for file");
     }
 
 }

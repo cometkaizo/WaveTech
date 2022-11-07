@@ -7,13 +7,14 @@ public enum ObjectType implements TokenType {
     SYMBOL_OR_REFERENCE("%symbol-ref%"),
     REFERENCE("%reference%");
 
-    private final String symbol;
+    private final String[] symbol = new String[1];
 
     ObjectType(String name) {
-        this.symbol = name;
+        this.symbol[0] = name;
     }
 
-    public String getSymbol() {
+    @Override
+    public String[] symbolSeq() {
         return symbol;
     }
 

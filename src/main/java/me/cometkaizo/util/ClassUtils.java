@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
-public abstract class ClassUtils {
+public final class ClassUtils {
 
     private static final Set<Class<?>> primitiveWrappers = Set.of(
             Boolean.class,
@@ -26,6 +26,17 @@ public abstract class ClassUtils {
             Double.class,
             Void.class
     );
+    private static final Set<Class<?>> primitives = Set.of(
+            boolean.class,
+            char.class,
+            byte.class,
+            short.class,
+            int.class,
+            long.class,
+            float.class,
+            double.class,
+            void.class
+    );
 
     public static Set<Class<?>> getClassesByFilter(TypeFilter filter) {
 
@@ -34,11 +45,11 @@ public abstract class ClassUtils {
 
         Set<BeanDefinition> definitions = provider.findCandidateComponents("me.cometkaizo");
 
-        return definitions.stream().map(bean -> forNameStrict(bean.getBeanClassName())).collect(Collectors.toUnmodifiableSet());
+        return definitions.stream().map(bean -> forNameOrThrow(bean.getBeanClassName())).collect(Collectors.toUnmodifiableSet());
 
     }
 
-    public static <T> Set<Class<? extends T>> getSubclasses(Class<? extends T> clazz) {
+    public static <T> Set<Class<? extends T>> getSubclassesOf(Class<? extends T> clazz) {
 
         Set<Class<?>> classes = getClassesByFilter(new AssignableTypeFilter(clazz));
 
@@ -52,6 +63,11 @@ public abstract class ClassUtils {
 
     }
 
+    public static boolean isInstanceOf(Object obj, @NotNull Class<?> clazz) {
+        return obj != null &&
+                clazz.isAssignableFrom(obj.getClass());
+    }
+
     public static <T> Class<? super T> getSuperclassBefore(Class<? super T> clazz, Class<? super T> limit) {
         if (clazz.getSuperclass().equals(limit)) return clazz;
         return getSuperclassBefore(clazz.getSuperclass(), limit);
@@ -59,6 +75,9 @@ public abstract class ClassUtils {
 
     public static boolean isPrimitiveWrapper(Class<?> clazz) {
         return primitiveWrappers.contains(clazz);
+    }
+    public static boolean isPrimitive(Class<?> clazz) {
+        return primitives.contains(clazz);
     }
 
     public static Class<?> getGenericType(Object obj) {
@@ -87,7 +106,7 @@ public abstract class ClassUtils {
      * @param name the name of the class
      * @return the class with the specified name
      */
-    public static @NotNull Class<?> forNameStrict(String name) {
+    public static @NotNull Class<?> forNameOrThrow(String name) {
         try {
             return Class.forName(name);
         } catch (ClassNotFoundException c) {
@@ -95,14 +114,14 @@ public abstract class ClassUtils {
         }
     }
 
-    public static @NotNull Class<?> forNameStrict(Module module, String name) {
+    public static @NotNull Class<?> forNameOrThrow(Module module, String name) {
         Class<?> result = Class.forName(module, name);
         if (result != null)
             return result;
         throw new RuntimeException(new ClassNotFoundException(name));
     }
 
-    public static @NotNull Class<?> forNameStrict(String name, boolean initialize, ClassLoader loader) {
+    public static @NotNull Class<?> forNameOrThrow(String name, boolean initialize, ClassLoader loader) {
         try {
             return Class.forName(name, initialize, loader);
         } catch (ClassNotFoundException c) {

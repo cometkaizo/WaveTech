@@ -14,14 +14,15 @@ public enum PrimitiveType implements TokenType {
     CHAR("char"),
     VOID("void");
 
-    private final String symbol;
+    private final String[] symbols;
 
-    PrimitiveType(String name) {
-        this.symbol = name;
+    PrimitiveType(String... symbols) {
+        this.symbols = symbols;
     }
 
-    public String getSymbol() {
-        return symbol;
+    @Override
+    public String[] symbolSeq() {
+        return symbols;
     }
 
 }

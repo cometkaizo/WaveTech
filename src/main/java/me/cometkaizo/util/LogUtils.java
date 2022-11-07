@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.regex.Matcher;
 
+// TODO: 2022-10-28 Try using the new Logger.java (low priority)
+
 public abstract class LogUtils {
     
     
@@ -25,7 +27,6 @@ public abstract class LogUtils {
     private static final LogLevel IMPOSSIBLE = new LogLevel("IMPOSSIBLE", ConsoleColors.RED, true);
     private static final LogLevel DEBUG_0 = new LogLevel("RUN", ConsoleColors.BLUE, true);
     private static final LogLevel DEBUG_1 = new LogLevel("REQ-C", ConsoleColors.BLUE, true);
-    private static final LogLevel DEBUG_2 = new LogLevel("DEBUG", ConsoleColors.BLUE, true);
 
     public static void enable(@NotNull LogLevel level) {
         level.setEnabled(true);
@@ -38,7 +39,6 @@ public abstract class LogUtils {
         IMPOSSIBLE.setEnabled(true);
         DEBUG_0.setEnabled(true);
         DEBUG_1.setEnabled(true);
-        DEBUG_2.setEnabled(true);
     }
     public static void disable(@NotNull LogLevel level) {
         level.setEnabled(false);
@@ -51,17 +51,14 @@ public abstract class LogUtils {
         IMPOSSIBLE.setEnabled(false);
         DEBUG_0.setEnabled(false);
         DEBUG_1.setEnabled(false);
-        DEBUG_2.setEnabled(false);
     }
     public static void enableDebug() {
         DEBUG_0.setEnabled(true);
         DEBUG_1.setEnabled(true);
-        DEBUG_2.setEnabled(true);
     }
     public static void disableDebug() {
         DEBUG_0.setEnabled(false);
         DEBUG_1.setEnabled(false);
-        DEBUG_2.setEnabled(false);
     }
     
     public static void setPrintStream(PrintStream out) {
@@ -267,8 +264,31 @@ public abstract class LogUtils {
                     build(FATAL.getColor(), getLogTime(), "[", shortenName(getCaller().map(StackTraceElement::getClassName).orElse("{NON-EXISTENT}")), ":", getCallerLine(), "] /// ",
                             FATAL.getName(), "> ", withArgs(message, args), ConsoleColors.RESET)
             );
-            System.exit(-1);
         }
+    }
+
+    /**
+     * prints an error message with optional arguments, then prints the stack trace of the error. <br>
+     * this method is mainly purposed to simplify error reporting in catch blocks when you don't want to throw an error
+     * but want to be notified when an error occurred
+     * @param t the error to be reported
+     * @param message the message to be printed
+     * @param args the arguments to be inserted into the message
+     */
+    public static void fatal(@Nullable Throwable t, String message, Object... args) {
+
+        if (FATAL.isEnabled()) {
+            err.println(
+                    build(FATAL.getColor(), getLogTime(), "[", shortenName(getCaller().map(StackTraceElement::getClassName).orElse("{NON-EXISTENT}")), ":", getCallerLine(), "] /// ",
+                            FATAL.getName(), "> ", withArgs(message + ": ", args), ConsoleColors.RESET)
+            );
+        }
+        if (t != null) {
+            t.printStackTrace(err);
+        } else {
+            error("{NULL EXCEPTION}");
+        }
+
     }
 
     /**
@@ -482,11 +502,5 @@ public abstract class LogUtils {
             );
         }
     }
-/*
-    public static void debug(String message, Object... args) {
-        if (DEBUG_2.isEnabled())
-            out.println(build(DEBUG_2.getColor(), getLogTime(), "[", getCaller(), ":", getCallerLine(), "] /// ",
-                    DEBUG_2.getName(), "> ", withArgs(message, args), ConsoleColors.RESET));
-    }*/
 
 }

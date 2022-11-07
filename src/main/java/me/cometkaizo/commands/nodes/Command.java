@@ -1,7 +1,5 @@
 package me.cometkaizo.commands.nodes;
 
-import me.cometkaizo.commands.exceptions.CommandSyntaxException;
-
 import java.util.HashMap;
 import java.util.Map;
 

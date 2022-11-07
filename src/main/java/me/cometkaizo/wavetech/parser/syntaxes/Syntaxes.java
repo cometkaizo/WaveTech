@@ -2,17 +2,24 @@ package me.cometkaizo.wavetech.parser.syntaxes;
 
 import me.cometkaizo.wavetech.parser.syntaxes.nodes.Syntax;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
 public final class Syntaxes {
 
-    public static final List<Supplier<Syntax>> syntaxCreators = List.of(
+    // ORDER MATTERS!!!
+    public static final List<Supplier<Syntax>> syntaxSuppliers = new ArrayList<>(List.of(
             ClassDeclarationSyntax::new,
+            MethodDeclarationSyntax::new,
             FieldDeclarationSyntax::new,
-            ClosingSymbolSyntax::new
-    );
+            RightBraceSyntax::new,
+            RightParenSyntax::new
+    ));
 
     private Syntaxes() {}
 
+    public static void register(Supplier<Syntax> syntaxSupplier) {
+        syntaxSuppliers.add(syntaxSupplier);
+    }
 }

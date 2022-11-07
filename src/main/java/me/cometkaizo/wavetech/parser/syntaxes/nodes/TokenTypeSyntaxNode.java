@@ -4,6 +4,7 @@ import me.cometkaizo.wavetech.lexer.tokens.Token;
 import me.cometkaizo.wavetech.lexer.tokens.TokenType;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TokenTypeSyntaxNode extends SyntaxNode {
@@ -44,7 +45,7 @@ public class TokenTypeSyntaxNode extends SyntaxNode {
 
     @Override
     protected String representData() {
-        return (type == transformedType? "" : transformedType + " from ") + type;
+        return String.valueOf(transformedType);
     }
 
     @Override
@@ -53,5 +54,18 @@ public class TokenTypeSyntaxNode extends SyntaxNode {
                "type=" + type +
                ", transformedType=" + transformedType +
                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TokenTypeSyntaxNode that = (TokenTypeSyntaxNode) o;
+        return type.equals(that.type) && transformedType.equals(that.transformedType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, transformedType);
     }
 }

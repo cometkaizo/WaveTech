@@ -7,8 +7,8 @@ import me.cometkaizo.util.LogUtils;
 import me.cometkaizo.wavetech.WaveTechApp;
 import me.cometkaizo.wavetech.lexer.Lexer;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.parser.Parser;
 import me.cometkaizo.wavetech.parser.nodes.SourceFileNode;
+import me.cometkaizo.wavetech.parser.Parser;
 
 import java.io.File;
 import java.util.List;

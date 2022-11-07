@@ -1,0 +1,5 @@
+2022-10-20: fields can be evaluated as null even if they are annotated @NotNull, even if null is
+checked for at every assignation of the field. If a superclass checks for a field in its constructor, and that field belongs
+to one of its subclasses (or if it is initialized in subclass constructors in general), then the superclass is accessing
+a field that has not been assigned yet; thus it is null, even if the field is final.
+https://stackoverflow.com/questions/3404301/whats-wrong-with-overridable-method-calls-in-constructors

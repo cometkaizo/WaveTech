@@ -18,7 +18,7 @@ public class ArrayUtils {
     public static <E> List<E> deepCopy(List<? extends E> original) {
         List<E> deepCopy = new ArrayList<>(0);
         for (E element : original) {
-            deepCopy.add(Util.cloneOrNull(element));
+            deepCopy.add(Utils.cloneOrNull(element));
         }
         return deepCopy;
     }
@@ -35,11 +35,9 @@ public class ArrayUtils {
     }
 
     public static <E> E filterFirst(List<E> list, Predicate<? super E> predicate) {
-        //LogUtils.ran("checkpoint 3.211 - ran filterFirst");
         return filterSingle(list, predicate, 0);
     }
     public static <E> E filterSingle(List<E> l, Predicate<? super E> predicate, int index) {
-        //LogUtils.ran("checkpoint 3.2111 - ran filterSingle");
         List<E> list = l.stream().filter(predicate).toList();
         if (index >= list.size() || list.size() + index < 0) {
             throw new NoSuchElementException(LogUtils.withArgs("""
@@ -52,10 +50,8 @@ public class ArrayUtils {
             ));
         }
         if (index < 0) {
-            //LogUtils.ran("checkpoint 3.2112 - returned from filterFirst < 0");
             return list.get(list.size() + index);
         }
-        //LogUtils.ran("checkpoint 3.2112 - returned from filterFirst >= 0");
         return list.get(index);
 
     }

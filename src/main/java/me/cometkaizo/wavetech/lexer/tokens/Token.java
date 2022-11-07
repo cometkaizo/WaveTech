@@ -1,12 +1,15 @@
 package me.cometkaizo.wavetech.lexer.tokens;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
 public class Token {
 
+    @NotNull
     protected final TokenType type;
+    @Nullable
     protected final Object value;
 
 
@@ -22,6 +25,7 @@ public class Token {
         this.value = value;
     }
 
+    @Nullable
     public Object getValue() {
         return value;
     }

@@ -60,7 +60,7 @@ public class FieldNode extends MemberNode {
                 ",propertyDeclarations=" + propertyDeclarations +
                 ",nodes=" + nodes.stream()
                         .map(binaryNode -> binaryNode.toString().indent(2))
-                        .collect(Collectors.joining(",\n", "[", "]")) +
+                        .collect(Collectors.joining("    ,\n", "[", "]")) +
                 '}';
     }
 }
