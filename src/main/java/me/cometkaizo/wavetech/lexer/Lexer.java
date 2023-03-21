@@ -1,77 +1,85 @@
 package me.cometkaizo.wavetech.lexer;
 
-import me.cometkaizo.util.LogUtils;
-import me.cometkaizo.wavetech.lexer.tokenizer.StringTokenizers;
-import me.cometkaizo.wavetech.lexer.tokenizer.StringTokenizer;
+import me.cometkaizo.util.StringUtils;
+import me.cometkaizo.wavetech.lexer.tokenizer.Tokenizer;
+import me.cometkaizo.wavetech.lexer.tokenizer.Tokenizers;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.lexer.tokens.types.Keywords;
-import me.cometkaizo.wavetech.lexer.tokens.types.ObjectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Lexer {
 
-    private LineReader lineReader;
+    private CharReader charReader;
     private final List<Token> tokens = new ArrayList<>();
 
 
     public List<Token> tokenize(File file) {
         throwIfInvalidFile(file);
-        tokens.add(new Token(ObjectType.SYMBOL, file.getName()));
 
-        lineReader = new LineReader(file);
+        charReader = newCharReader(file);
 
         tokenizeLines();
         return tokens;
     }
 
+    @NotNull
+    private static CharReader newCharReader(File file) {
+        try {
+            return new CharReader(file);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
     private void tokenizeLines() {
 
-        while (lineReader.hasNext()) {
-            lineReader.advanceWord();
-
-            readSymbol();
+        while (charReader.hasNext()) {
+            charReader.skipWhitespace();
+            readNextChar();
         }
 
     }
 
-    private void readSymbol() {
-        String symbol = lineReader.currentWord();
+    private void readNextChar() {
+        int startCursor = charReader.cursor();
 
-        LogUtils.info("Lexing symbol '{}'", symbol);
-        throwIfInvalidSymbol(symbol);
+        List<Tokenizer> tokenizers = Tokenizers.tokenizers;
+        for (Tokenizer tokenizer : tokenizers) {
+            var token = tokenizer.tryTokenize(charReader);
 
-        Optional<StringTokenizer> tokenizer = StringTokenizers.tokenizers.stream().filter(parser -> parser.accepts(lineReader)).findFirst();
+            if (token != null) {
+                addToken(token);
+                return;
+            }
 
-        if (tokenizer.isPresent()) tokens.add(tokenizer.get().tokenize(lineReader));
-        else throw new CompilationException("Unknown symbol '" + symbol + "' cannot be lexed", lineReader.getLine(), lineReader.getCol());
+            charReader.jumpTo(startCursor);
+        }
+
+        throw newIllegalSymbolException(charReader.current());
     }
 
-    private void throwIfInvalidSymbol(String symbol) {
-        LogUtils.debug("symbol {}", symbol);
-        for (int peekAmt = 0, len = symbol.length(); peekAmt < len; peekAmt++) {
-            throwIfInvalidChar(peekAmt);
-        }
+    @NotNull
+    private CompilationException newIllegalSymbolException(char character) {
+
+        String message = "Could not lex character '" + character + "' with unicode: \\u" + StringUtils.unicodeOf(character);
+
+        return new CompilationException(
+                message,
+                charReader.getLine(), charReader.getCol());
     }
 
-    private void throwIfInvalidChar(int peekAmt) {
-        char peekedChar = lineReader.peekChar(peekAmt);
-
-        if (!Keywords.isValidSymbolName(String.valueOf(peekedChar))
-                && !Keywords.isAtPrimitiveOperator(lineReader)
-                && !Keywords.isNumber(peekedChar)) {
-            throw new CompilationException("Illegal character '" + peekedChar + "'", lineReader.getLine(), lineReader.getCol());
-        }
+    private void addToken(Token token) {
+        tokens.add(token);
     }
 
     private static void throwIfInvalidFile(File file) {
         if (!file.exists() || file.isDirectory()) {
-            throw new IllegalArgumentException("File does not exist or is directory");
+            throw new IllegalArgumentException("'" + file.getPath() + "' does not exist or is a directory");
         }
         if (file.getName().isBlank())
             throw new IllegalArgumentException("Illegal name '" + file.getName() + "' for file");

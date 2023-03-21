@@ -1,7 +1,7 @@
 package me.cometkaizo.system.driver;
 
+import me.cometkaizo.logging.LogUtils;
 import me.cometkaizo.system.app.App;
-import me.cometkaizo.util.LogUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -10,37 +10,24 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 
 public abstract class SystemDriver {
 
-    private static SystemDriver instance = null;
-
     private final App app;
 
 
-    protected final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
-    protected List<ScheduledFuture<?>> driverLoops = new ArrayList<>(1);
+    private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
+    private final List<ScheduledFuture<?>> tasks = new ArrayList<>(1);
     private boolean isRunning = false;
 
     protected SystemDriver(@NotNull App app) {
-        instance = this;
         this.app = app;
     }
 
     public static InputStream getConsoleIn() {
         return System.in;
-    }
-
-    public static boolean currentDriverExists() {
-        return instance != null;
-    }
-    public static SystemDriver getCurrentDriver() {
-        if (!currentDriverExists()) throw new IllegalStateException("System has not created a driver yet");
-        return instance;
-    }
-    public static Class<? extends SystemDriver> getCurrentDriverType() {
-        return instance.getClass();
     }
 
     public void start() {
@@ -52,12 +39,11 @@ public abstract class SystemDriver {
     }
 
     public void stop() {
-        if (!isRunning) throw new IllegalStateException("Cannot stop a driver that is not running");
-
-        LogUtils.debugCaller("Shutting down game...");
+        if (!isRunning) throw new IllegalStateException("Driver is not started");
 
         cleanup();
-        driverLoops.forEach(loop -> loop.cancel(false));
+        tasks.forEach(loop -> loop.cancel(false));
+        tasks.clear();
 
         isRunning = false;
     }
@@ -68,6 +54,42 @@ public abstract class SystemDriver {
 
     protected void cleanup() {
 
+    }
+
+
+    protected final void addLoop(Runnable task, long period, TimeUnit unit, ExceptionManager exceptionManager) {
+        addTask(executor.scheduleAtFixedRate(() -> {
+            try {
+                task.run();
+            } catch (Exception e) {
+                Throwable newEx = exceptionManager.handleException(e);
+                if (newEx != null) throw newEx instanceof RuntimeException r ? r : new RuntimeException(newEx);
+            } catch (Error err) {
+                Throwable newEx = exceptionManager.handleError(err);
+                if (newEx != null) throw newEx instanceof RuntimeException r ? r : new RuntimeException(newEx);
+                throw err;
+            }
+        }, 0, period, unit));
+    }
+
+    protected final void addLoop(Runnable task, long period, TimeUnit unit) {
+        addLoop(task, period, unit, new ExceptionManager() {
+            @Override
+            public Throwable handleException(Exception e) {
+                LogUtils.report(e, "Encountered exception");
+                return null;
+            }
+
+            @Override
+            public Error handleError(Error err) {
+                LogUtils.report(err, "Encountered fatal exception");
+                return err;
+            }
+        });
+    }
+
+    protected final void addTask(ScheduledFuture<?> task) {
+        tasks.add(task);
     }
 
     public App getApp() {

@@ -4,25 +4,18 @@ import me.cometkaizo.wavetech.lexer.tokens.TokenType;
 
 public enum PrimitiveType implements TokenType {
 
-    INT("int"),
-    LONG("long"),
-    SHORT("short"),
-    BYTE("byte"),
-    FLOAT("float"),
-    DOUBLE("double"),
-    BOOLEAN("boolean"),
-    CHAR("char"),
-    VOID("void");
+    VOID("void"),
+    SELF("self");
 
-    private final String[] symbols;
+    private final String symbol;
 
-    PrimitiveType(String... symbols) {
-        this.symbols = symbols;
+    PrimitiveType(String symbol) {
+        this.symbol = symbol;
     }
 
     @Override
-    public String[] symbolSeq() {
-        return symbols;
+    public String symbol() {
+        return symbol;
     }
 
 }

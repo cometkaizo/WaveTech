@@ -1,7 +1,15 @@
 package me.cometkaizo.wavetech.lexer.tokens;
 
+import me.cometkaizo.wavetech.syntaxes.TokenTypeSyntaxNodeBuilder;
+import org.jetbrains.annotations.Nullable;
+
 public interface TokenType {
 
-    String[] symbolSeq();
+    @Nullable
+    String symbol();
+
+    default TokenTypeSyntaxNodeBuilder node() {
+        return new TokenTypeSyntaxNodeBuilder(this);
+    }
 
 }

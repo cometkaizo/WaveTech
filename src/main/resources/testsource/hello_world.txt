@@ -1,7 +1,21 @@
-class Main {
-    public int n = 0 * math_lol - something;
+public class Main {
+    Integer a;
+    Integer b;
+    Integer c;
+    public final Integer n = main(0, true);
 
-    public static Object main(Object o, Object y) {
 
+    public static Integer main(Integer f, Boolean c) {
+        for (Integer i = f; f < 0; f += 1) {
+
+        }
+        method(0, null);
     }
+
+
+    public void method(Integer f, Object c) {
+        main(f, false);
+    }
+
+
 }

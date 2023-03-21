@@ -46,6 +46,7 @@ public abstract class CommandNodeBuilder {
             focus.addSubNode(subNode);
         }
 
+        focus = mergeDestination;
         return this;
     }
 

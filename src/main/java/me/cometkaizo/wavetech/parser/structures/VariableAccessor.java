@@ -1,0 +1,55 @@
+package me.cometkaizo.wavetech.parser.structures;
+
+import me.cometkaizo.wavetech.analyzer.diagnostics.Diagnostic;
+import me.cometkaizo.wavetech.analyzer.diagnostics.UnknownVariableDiagnostic;
+import me.cometkaizo.wavetech.analyzer.structures.ResourceAnalyzer;
+import me.cometkaizo.wavetech.syntaxes.AbstractSyntaxStructure;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Objects;
+
+public class VariableAccessor extends AbstractSyntaxStructure<ResourceAnalyzer> implements ResourceAccessor<Identifier> {
+
+    public Identifier variableName;
+
+    @Override
+    public Identifier getSignature() {
+        return variableName;
+    }
+
+    @Override
+    public void store(String label, Object object) {
+        if ("variableName".equals(label)) variableName = (Identifier) object;
+    }
+
+    @Override
+    public Diagnostic getNoResourceDiagnostic() {
+        return new UnknownVariableDiagnostic(this);
+    }
+
+    @Override
+    @NotNull
+    protected ResourceAnalyzer createAnalyzer() {
+        return new ResourceAnalyzer(this);
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + '{' +
+                "variableName=" + variableName +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        VariableAccessor that = (VariableAccessor) o;
+        return Objects.equals(variableName, that.variableName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(variableName);
+    }
+}

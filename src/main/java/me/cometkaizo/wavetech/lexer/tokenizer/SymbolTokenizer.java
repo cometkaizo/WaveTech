@@ -1,20 +1,34 @@
 package me.cometkaizo.wavetech.lexer.tokenizer;
 
-import me.cometkaizo.wavetech.lexer.LineReader;
+import me.cometkaizo.wavetech.lexer.CharReader;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.lexer.tokens.types.Keywords;
-import me.cometkaizo.wavetech.lexer.tokens.types.ObjectType;
+import me.cometkaizo.wavetech.lexer.tokens.types.TypeKeyword;
 
-public class SymbolTokenizer extends StringTokenizer {
+import java.util.regex.Pattern;
+
+public class SymbolTokenizer extends Tokenizer {
+
+
+    private static final Pattern firstLetterRegex = Pattern.compile("[a-zA-Z$_]");
+    private static final Pattern letterRegex = Pattern.compile("[a-zA-Z0-9$_]");
 
     @Override
-    public boolean accepts(LineReader reader) {
-        return Keywords.isValidSymbolName(reader.currentWord());
-    }
+    public Token tryTokenize(CharReader reader) {
+        if (!reader.hasNext()) return null;
+        var start = reader.getPosition();
+        StringBuilder builder = new StringBuilder();
 
-    @Override
-    public Token tokenize(LineReader reader) {
-        if (!accepts(reader)) throw new IllegalArgumentException();
-        return new Token(ObjectType.SYMBOL_OR_REFERENCE, reader.currentWord());
+        String firstLetter = String.valueOf(reader.next());
+        if (!firstLetterRegex.matcher(firstLetter).matches()) return null;
+
+        builder.append(firstLetter);
+        while (true) {
+            String letter = String.valueOf(reader.current());
+            if (!letterRegex.matcher(letter).matches())
+                return new Token(TypeKeyword.SYMBOL, builder.toString(), start, reader.getPosition());
+
+            builder.append(letter);
+            reader.advance();
+        }
     }
 }

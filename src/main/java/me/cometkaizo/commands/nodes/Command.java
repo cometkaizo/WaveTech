@@ -1,6 +1,9 @@
 package me.cometkaizo.commands.nodes;
 
+import me.cometkaizo.commands.CommandSyntaxException;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,17 +21,15 @@ public abstract class Command {
     protected boolean success = true;
     String[] args;
 
+    protected Map<String, Object> parsedArgs = new HashMap<>(0);
+
     public boolean getSuccess() {
         return success;
     }
-
-    protected Map<String, Object> parsedArgs = new HashMap<>(0);
     public Map<String, Object> getParsedArguments() {
         return parsedArgs;
     }
-    public static String getName() {
-        throw new IllegalStateException("All subclasses of Command must overwrite this method");
-    }
+    public abstract List<String> getNames();
 
     /**
      * Executes this command and returns the result if one exists. Otherwise, returns null.

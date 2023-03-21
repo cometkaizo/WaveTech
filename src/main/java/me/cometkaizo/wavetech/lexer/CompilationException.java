@@ -54,7 +54,7 @@ public class CompilationException extends RuntimeException {
     @Override
     public String getMessage() {
         return super.getMessage() + "\nCaused at line " +
-                (line == null ? "UNKNOWN" : line + 1) +
-                ", column " + (col == null ? "UNKNOWN" : "~" + (col + 1));
+                (line == null ? "UNKNOWN" : line) +
+                ", column " + (col == null ? "UNKNOWN" : col);
     }
 }

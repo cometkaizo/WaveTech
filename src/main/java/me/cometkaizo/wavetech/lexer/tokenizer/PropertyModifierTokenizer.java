@@ -1,19 +1,18 @@
 package me.cometkaizo.wavetech.lexer.tokenizer;
 
-import me.cometkaizo.wavetech.lexer.LineReader;
+import me.cometkaizo.wavetech.lexer.CharReader;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.lexer.tokens.types.Keywords;
+import me.cometkaizo.wavetech.lexer.tokens.types.ModifierKeyword;
 
-public class PropertyModifierTokenizer extends StringTokenizer {
-
-    @Override
-    public boolean accepts(LineReader reader) {
-        return Keywords.isAtModifierKeyword(reader);
-    }
+public class PropertyModifierTokenizer extends Tokenizer {
 
     @Override
-    public Token tokenize(LineReader reader) {
-        if (!accepts(reader)) throw new IllegalArgumentException();
-        return new Token(Keywords.parseModifierKeyword(reader));
+    public Token tryTokenize(CharReader reader) {
+        var start = reader.getPosition();
+
+        var result = getValidTokenType(reader, ModifierKeyword.values());
+        if (result == null) return null;
+
+        return new Token(result, start, reader.getPosition());
     }
 }

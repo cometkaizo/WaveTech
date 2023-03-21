@@ -1,62 +1,47 @@
 package me.cometkaizo.wavetech.parser.syntaxes;
 
-import me.cometkaizo.wavetech.lexer.tokens.types.ObjectType;
-import me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveOperator;
-import me.cometkaizo.wavetech.parser.Parser;
-import me.cometkaizo.wavetech.parser.nodes.DeclaredNode;
-import me.cometkaizo.wavetech.parser.syntaxes.nodes.Syntax;
-import me.cometkaizo.wavetech.parser.syntaxes.visitors.ParserStatusVisitor;
-import me.cometkaizo.wavetech.parser.syntaxes.visitors.VariableAssignationParserVisitor;
+import me.cometkaizo.wavetech.parser.structures.VariableAssignation;
+import me.cometkaizo.wavetech.syntaxes.Syntax;
+import me.cometkaizo.wavetech.syntaxes.SyntaxStructure;
+import org.jetbrains.annotations.NotNull;
 
-import static me.cometkaizo.wavetech.lexer.tokens.types.ObjectType.*;
+import static me.cometkaizo.wavetech.lexer.tokens.types.OperatorKeyword.*;
 
-class VariableAssignationSyntax extends Syntax {
+public class VariableAssignationSyntax extends Syntax<VariableAssignation> {
 
-    protected String varName = null;
-    protected final ExpressionSyntax expressionSyntax = new ExpressionSyntax();
+    private VariableAssignationSyntax(boolean endWithSemicolon) {
 
-    public VariableAssignationSyntax() {
-
-        rootNode
-                .then(SYMBOL_OR_REFERENCE, REFERENCE)
-                .executes(() ->
-                        varName = (String) getInputTokens().get(ObjectType.class).stream()
-                                .filter(token -> token.getType() == SYMBOL)
-                                .findFirst().orElseThrow()
-                                .getValue()
+        var builder = rootBuilder
+                .then("variableAccessor", VariableAccessSyntax::getInstance)
+                .split("operation",
+                        EQUALS,
+                        PLUS_ASSIGN,
+                        MINUS_ASSIGN,
+                        ASTERISK_ASSIGN,
+                        DOUBLE_ASTERISK_ASSIGN,
+                        SLASH_ASSIGN
                 )
-                .then(PrimitiveOperator.EQUALS)
-                .thenSyntax(expressionSyntax)
-        ;
+                .then("value", ExpressionSyntax::getInstance);
 
-        addNextExpectedSyntax(new SemicolonSyntax());
-
-    }
-    public VariableAssignationSyntax(String varName) {
-        this.varName = varName;
-
-        rootNode
-                .then(PrimitiveOperator.EQUALS)
-                .thenSyntax(expressionSyntax)
-        ;
-
-        addNextExpectedSyntax(new SemicolonSyntax());
+        if (endWithSemicolon)
+            builder.then(SEMICOLON);
 
     }
 
-    @Override
-    public ParserStatusVisitor createVisitor(DeclaredNode containingToken) {
-        if (varName == null) throw new IllegalStateException();
-        return new VariableAssignationParserVisitor(containingToken, varName, expressionSyntax.createOperationNode());
+    public static VariableAssignationSyntax getInstance() {
+        return InstanceHolder.INSTANCE;
+    }
+    public static VariableAssignationSyntax getNoSemicolonInstance() {
+        return InstanceHolder.NO_SEMICOLON_INSTANCE;
+    }
+
+    private static class InstanceHolder {
+        static final VariableAssignationSyntax INSTANCE = new VariableAssignationSyntax(true);
+        static final VariableAssignationSyntax NO_SEMICOLON_INSTANCE = new VariableAssignationSyntax(false);
     }
 
     @Override
-    protected boolean isValidInStatus(Parser.Status status) {
-        return true;
-    }
-
-    @Override
-    protected boolean isValidInContext(DeclaredNode context) {
-        return true;
+    public @NotNull VariableAssignation getStructure(SyntaxStructure parent) {
+        return new VariableAssignation();
     }
 }

@@ -1,6 +1,6 @@
 package me.cometkaizo.commands.nodes;
 
-import me.cometkaizo.util.LogUtils;
+import me.cometkaizo.logging.LogUtils;
 
 public class LiteralCommandNodeBuilder extends CommandNodeBuilder {
 

@@ -1,33 +1,27 @@
 package me.cometkaizo.wavetech;
 
+import me.cometkaizo.commands.CommandGroup;
+import me.cometkaizo.commands.CommandSyntaxException;
+import me.cometkaizo.commands.UnknownCommandException;
+import me.cometkaizo.logging.LogUtils;
 import me.cometkaizo.system.app.App;
-import me.cometkaizo.util.LogUtils;
 import me.cometkaizo.wavetech.commands.CompileCommand;
 import me.cometkaizo.wavetech.commands.ExecuteCommand;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
-import java.util.Objects;
-
 public class WaveTechApp extends App {
 
+    private final CommandGroup commandGroup = new CommandGroup(
+            () -> new CompileCommand(this),
+            () -> new ExecuteCommand(this)
+    );
+
+
     public void parseInput(@NotNull String input) {
-        Objects.requireNonNull(input, "Input cannot be null");
-        if (input.isBlank()) return;
-
-        String[] parts = input.trim().split(" ");
-        if (parts.length == 0) return;
-
-        String command = parts[0];
-        String[] args = Arrays.copyOfRange(parts, 1, parts.length);
-
-        LogUtils.info("hi");
-
-        switch (command) {
-            case "exit" -> System.exit(0);
-            case "compile" -> new CompileCommand(this).execute(args);
-            case "execute" -> new ExecuteCommand(this).execute(args);
-            default -> LogUtils.info("'{}' is not a command", command);
+        try {
+            commandGroup.execute(input);
+        } catch (CommandSyntaxException | UnknownCommandException e) {
+            LogUtils.info(e.getMessage());
         }
     }
 

@@ -1,7 +1,7 @@
 package me.cometkaizo.commands.nodes;
 
 import me.cometkaizo.commands.arguments.Argument;
-import me.cometkaizo.util.LogUtils;
+import me.cometkaizo.logging.LogUtils;
 
 public class ArgumentCommandNodeBuilder extends CommandNodeBuilder {
 

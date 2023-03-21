@@ -1,5 +1,8 @@
 package me.cometkaizo.commands.nodes;
 
+import me.cometkaizo.commands.CommandSyntaxException;
+import me.cometkaizo.util.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -25,14 +28,11 @@ abstract class CommandNode {
 
     protected CommandNode(CommandNodeBuilder builder) {
         this.subNodes = buildSubNodes(builder);
-        this.tasks = List.of(builder.tasks.toArray(Runnable[]::new));
+        this.tasks = List.copyOf(builder.tasks);
         this.level = builder.level;
     }
     private static List<CommandNode> buildSubNodes(CommandNodeBuilder builder) {
-        List<CommandNode> result = builder.subNodes.stream()
-                .map(CommandNodeBuilder::build)
-                .collect(Collectors.toCollection(ArrayList::new));
-        return List.of(result.toArray(CommandNode[]::new));
+        return CollectionUtils.map(builder.subNodes, CommandNodeBuilder::build);
     }
 
 
@@ -43,7 +43,7 @@ abstract class CommandNode {
      * @param context the context to run this command in
      * @throws CommandSyntaxException If there are insufficient arguments, or an argument could not be parsed by any sub-nodes.
      */
-    protected final void execute(Command context) throws CommandSyntaxException {
+    final void execute(Command context) throws CommandSyntaxException {
         this.context = context;
 
         executeFunctionality();
@@ -55,8 +55,6 @@ abstract class CommandNode {
             executeSubNodes();
     }
 
-    protected abstract void executeFunctionality();
-
     private void executeSubNodes() throws CommandSyntaxException {
         if (!hasSubNodes()) return;
 
@@ -64,21 +62,35 @@ abstract class CommandNode {
             executeSubNodesWithNextArg();
         else {
             if (requiresNextArg()) {
-                String formattedArgs = Arrays.stream(context.args)
-                        .map(Objects::toString)
-                        .collect(Collectors.joining(" "));
-
-                throw new CommandSyntaxException(
-                        "Unexpected end of arguments: \n\t" +
-                                formattedArgs + "\n" +
-                                " ".repeat(formattedArgs.length()) + "^\n" +
-                                "subNodes: \n" +
-                                subNodes.stream()
-                                        .map(Objects::toString)
-                                        .collect(Collectors.joining("\n"))
-                );
+                throw notEnoughArgsException();
             } else executeNoArgSubNode();
         }
+    }
+
+
+    protected abstract boolean accepts(String arg);
+
+    protected abstract void executeFunctionality();
+
+    private CommandSyntaxException notEnoughArgsException() {
+        String formattedArgs = Arrays.stream(context.args)
+                .map(Objects::toString)
+                .collect(Collectors.joining(" "));
+        String formattedSubNodes = subNodes.stream()
+                .map(CommandNode::toPrettyString)
+                .collect(Collectors.joining("\n or "));
+
+        return new CommandSyntaxException(
+                "Unexpected end of arguments: \n    " +
+                        formattedArgs + "\n    " +
+                        " ".repeat(formattedArgs.length()) + "^\n" +
+                        "required: \n    " +
+                        formattedSubNodes
+        );
+    }
+
+    public String toPrettyString() {
+        return getClass().getSimpleName().replaceAll("(?<=.)CommandNode$", "").toUpperCase();
     }
 
     private void executeSubNodesWithNextArg() throws CommandSyntaxException {
@@ -90,7 +102,16 @@ abstract class CommandNode {
             }
         }
 
-        throw new CommandSyntaxException("Unexpected argument '" + nextArg() + "'; candidate sub-nodes: \n" + subNodes);
+        throw wrongArgumentTypeException();
+    }
+
+    @NotNull
+    private CommandSyntaxException wrongArgumentTypeException() {
+        String formattedSubNodes = subNodes.stream()
+                .map(CommandNode::toPrettyString)
+                .collect(Collectors.joining("\n or "));
+
+        return new CommandSyntaxException("Unexpected argument '" + nextArg() + "'; required: \n    " + formattedSubNodes);
     }
 
     private void executeNoArgSubNode() {
@@ -100,9 +121,6 @@ abstract class CommandNode {
 
         noArgSubNode.execute(context);
     }
-
-
-    protected abstract boolean accepts(String arg);
 
     private boolean requiresNextArg() {
         return subNodes.stream().allMatch(CommandNode::acceptsArguments);

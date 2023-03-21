@@ -1,5 +1,9 @@
 package me.cometkaizo.util;
 
+import me.cometkaizo.logging.ConsoleColors;
+import me.cometkaizo.logging.LogFormatter;
+import me.cometkaizo.logging.Logger;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;

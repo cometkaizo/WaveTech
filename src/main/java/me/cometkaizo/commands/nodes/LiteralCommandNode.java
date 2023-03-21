@@ -1,13 +1,12 @@
 package me.cometkaizo.commands.nodes;
 
-import me.cometkaizo.util.LogUtils;
+import me.cometkaizo.logging.LogUtils;
 
 class LiteralCommandNode extends CommandNode {
 
     private final String literal;
 
     protected boolean accepts(String string) {
-        LogUtils.debug("string: {}, literal: {}, equals? {}", string, literal, string.equals(literal));
         return string.equals(literal);
     }
 
@@ -28,5 +27,10 @@ class LiteralCommandNode extends CommandNode {
                     literal: {},
                     level: {}
                 }""", literal, level);
+    }
+
+    @Override
+    public String toPrettyString() {
+        return literal;
     }
 }

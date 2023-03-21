@@ -1,29 +1,21 @@
 package me.cometkaizo.wavetech.lexer.tokenizer;
 
-import me.cometkaizo.util.LogUtils;
-import me.cometkaizo.wavetech.lexer.LineReader;
+import me.cometkaizo.wavetech.lexer.CharReader;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.lexer.tokens.types.Keywords;
-import me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveOperator;
+import me.cometkaizo.wavetech.lexer.tokens.types.OperatorKeyword;
 
-public class PrimitiveOperatorTokenizer extends StringTokenizer {
-
-    @Override
-    public boolean accepts(LineReader reader) {
-        if (reader.currentWord().length() != 1) return false;
-        return Keywords.isAtPrimitiveOperator(reader);
-    }
+public class PrimitiveOperatorTokenizer extends Tokenizer {
 
     @Override
-    public Token tokenize(LineReader reader) {
-        if (!accepts(reader)) throw new IllegalArgumentException();
+    public Token tryTokenize(CharReader reader) {
+        var start = reader.getPosition();
 
-        LogUtils.warn("reader's current word: {}, peeking word: {}",
-                reader.currentWord(),
-                (reader.hasNext()? reader.peekWord() : null));
-        PrimitiveOperator result = Keywords.parsePrimitiveOperator(reader);
-        LogUtils.warn("parsed primitive operator: {}", result);
-        return new Token(result);
+        var result = getValidTokenType(reader, OperatorKeyword.values());
+        if (result == null) return null;
+
+        return new Token(result, start, reader.getPosition());
     }
+
+
 
 }

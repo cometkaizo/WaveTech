@@ -8,21 +8,33 @@ import java.util.Objects;
 public class Token {
 
     @NotNull
-    protected final TokenType type;
+    public final TokenType type;
     @Nullable
-    protected final Object value;
+    public final Object value;
+    @NotNull
+    public final Position start;
+    @NotNull
+    public final Position end;
 
 
-    public Token(@NotNull TokenType type) {
+    public Token(@NotNull TokenType type, @NotNull Position start, @NotNull Position end) {
         Objects.requireNonNull(type, "Type cannot be null");
+        Objects.requireNonNull(start, "Start position cannot be null");
+        Objects.requireNonNull(end, "End position cannot be null");
         this.type = type;
-        value = null;
+        this.value = null;
+        this.start = start;
+        this.end = end;
     }
-    public Token(@NotNull TokenType type, @NotNull Object value) {
+    public Token(@NotNull TokenType type, @NotNull Object value, @NotNull Position start, @NotNull Position end) {
         Objects.requireNonNull(type, "Type cannot be null");
         Objects.requireNonNull(value, "Value cannot be null");
+        Objects.requireNonNull(start, "Start position cannot be null");
+        Objects.requireNonNull(end, "End position cannot be null");
         this.type = type;
         this.value = value;
+        this.start = start;
+        this.end = end;
     }
 
     @Nullable

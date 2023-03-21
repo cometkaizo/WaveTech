@@ -1,16 +1,18 @@
 package me.cometkaizo.commands.nodes;
 
-import me.cometkaizo.util.LogUtils;
+import me.cometkaizo.logging.LogUtils;
 
 import java.util.function.Supplier;
 
 class ConditionalCommandNode extends SoftCommandNode {
 
     protected final Supplier<Boolean> condition;
+    protected final String name;
 
     public ConditionalCommandNode(ConditionalCommandNodeBuilder builder) {
         super(builder);
         this.condition = builder.condition;
+        this.name = builder.name;
     }
 
     @Override
@@ -25,5 +27,10 @@ class ConditionalCommandNode extends SoftCommandNode {
                     condition: {},
                     level: {}
                 }""", condition, level);
+    }
+
+    @Override
+    public String toPrettyString() {
+        return name;
     }
 }

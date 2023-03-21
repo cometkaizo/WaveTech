@@ -1,7 +1,7 @@
 package me.cometkaizo.commands.nodes;
 
 import me.cometkaizo.commands.arguments.Argument;
-import me.cometkaizo.util.LogUtils;
+import me.cometkaizo.logging.LogUtils;
 
 class ArgumentCommandNode extends CommandNode {
 
@@ -31,5 +31,10 @@ class ArgumentCommandNode extends CommandNode {
                     level: {}
                 }""",
                 argument, level);
+    }
+
+    @Override
+    public String toPrettyString() {
+        return argument.toPrettyString() + " ARGUMENT";
     }
 }

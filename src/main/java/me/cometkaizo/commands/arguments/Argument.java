@@ -40,4 +40,8 @@ public abstract class Argument {
      */
     public abstract Object translate(String string) throws IllegalArgumentException;
 
+    public String toPrettyString() {
+        return getClass().getSimpleName().replaceAll("(?<=.)Argument$", "").toUpperCase();
+    }
+
 }

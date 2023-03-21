@@ -1,20 +1,22 @@
 package me.cometkaizo.wavetech.lexer.tokenizer;
 
-import me.cometkaizo.wavetech.lexer.LineReader;
+import me.cometkaizo.wavetech.lexer.CharReader;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveValue;
+import me.cometkaizo.wavetech.lexer.tokens.types.Literal;
 
-public class BooleanTokenizer extends StringTokenizer {
+public class BooleanTokenizer extends Tokenizer {
 
-    @Override
-    public boolean accepts(LineReader reader) {
-        String string = reader.currentWord();
-        return string.equals("true") || string.equals("false");
-    }
+    private static final String FALSE = "false";
+    private static final String TRUE = "true";
+
 
     @Override
-    public Token tokenize(LineReader reader) {
-        if (!accepts(reader)) throw new IllegalArgumentException();
-        return new Token(PrimitiveValue.BOOLEAN, reader.currentWord().equals("true"));
+    public Token tryTokenize(CharReader reader) {
+        var start = reader.getPosition();
+
+        if (reader.nextSequenceEquals(FALSE)) return new Token(Literal.BOOLEAN, false, start, reader.getPosition());
+        if (reader.nextSequenceEquals(TRUE)) return new Token(Literal.BOOLEAN, true, start, reader.getPosition());
+        return null;
     }
+
 }

@@ -1,5 +1,6 @@
 package me.cometkaizo.util;
 
+import me.cometkaizo.logging.LogUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

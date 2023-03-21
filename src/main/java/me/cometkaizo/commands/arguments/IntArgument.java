@@ -1,6 +1,6 @@
 package me.cometkaizo.commands.arguments;
 
-import me.cometkaizo.util.LogUtils;
+import me.cometkaizo.logging.LogUtils;
 
 import java.util.function.Predicate;
 

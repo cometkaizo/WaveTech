@@ -1,28 +1,15 @@
 package me.cometkaizo.util;
 
+import java.util.Random;
+
 @SuppressWarnings("unused")
-public abstract class MathUtils {
+public final class MathUtils {
 
     public static final int BINARY = 2;
     public static final int DECIMAL = 10;
     public static final int HEXADECIMAL = 16;
 
 
-
-    /**
-     * Adds (or subtracts) an amount, but whenever the number goes outside the boundaries it loops back to the other side
-     * <br><br>
-     * <blockquote>
-     * For example:
-     * <br>
-     * loopAdd(5, 5, 2, 7) would return 5 because adding 2 to 5 makes 7, which is the ceiling, so the remaining 3 to add loops back to the floor and gives 2 + 3
-     * </blockquote>
-     * @param var the number to add to
-     * @param amt the number to add
-     * @param floor the lower boundary
-     * @param ceiling the upper boundary
-     * @return var + amt if it is within floor and ceiling, otherwise it loops until the operation is done
-     */
     public static double loopAdd(double var, double amt, double floor, double ceiling) {
 
         double distance = Math.max(floor, ceiling) - Math.min(floor, ceiling);
@@ -92,9 +79,36 @@ public abstract class MathUtils {
                 else continue;
             }
             // if this non-hyphen character is a digit
-            if(Character.digit(s.charAt(i), radix) < 0)
+            if (Character.digit(s.charAt(i), radix) < 0)
                 return false;
         }
         return true;
+    }
+
+
+    public static int random(int min, int max) {
+        return RandomHolder.random.nextInt(min, max);
+    }
+    public static double random(double min, double max) {
+        return RandomHolder.random.nextDouble(min, max);
+    }
+
+    private static class RandomHolder {
+        static final Random random = new Random();
+    }
+
+    public static int digitCount(int number) {
+        if (number == 0) return 1;
+
+        int digitCount = 0;
+        while (number != 0) {
+            number /= 10;
+            digitCount ++;
+        }
+        return digitCount;
+    }
+
+    private MathUtils() {
+        throw new AssertionError("No MathUtils instances for you!");
     }
 }

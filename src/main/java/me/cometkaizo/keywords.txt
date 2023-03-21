@@ -9,7 +9,7 @@ declaration keywords // keywords that are used to declare the type of any symbol
     @interface
     enum
     record
-primitive types // DONE except for void
+primitive types // DONE
     int
     long
     short

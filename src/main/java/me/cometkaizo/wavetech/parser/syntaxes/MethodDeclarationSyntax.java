@@ -1,135 +1,157 @@
 package me.cometkaizo.wavetech.parser.syntaxes;
 
-import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.lexer.tokens.TokenType;
-import me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveType;
-import me.cometkaizo.wavetech.parser.Parser;
-import me.cometkaizo.wavetech.parser.nodes.ClassNode;
-import me.cometkaizo.wavetech.parser.nodes.DeclaredNode;
-import me.cometkaizo.wavetech.parser.syntaxes.nodes.ConditionalSyntaxNodeBuilder;
-import me.cometkaizo.wavetech.parser.syntaxes.nodes.MatcherFunction;
-import me.cometkaizo.wavetech.parser.syntaxes.nodes.Syntax;
-import me.cometkaizo.wavetech.parser.syntaxes.nodes.TokenTypeSyntaxNodeBuilder;
+import me.cometkaizo.wavetech.parser.structures.ClassStructure;
+import me.cometkaizo.wavetech.parser.structures.MethodStructure;
+import me.cometkaizo.wavetech.syntaxes.Syntax;
+import me.cometkaizo.wavetech.syntaxes.SyntaxStructure;
+import me.cometkaizo.wavetech.syntaxes.SyntaxSyntaxNodeBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import static me.cometkaizo.wavetech.lexer.tokens.types.ModifierKeyword.*;
+import static me.cometkaizo.wavetech.lexer.tokens.types.OperatorKeyword.*;
+import static me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveType.VOID;
+import static me.cometkaizo.wavetech.lexer.tokens.types.VisibilityKeyword.*;
 
-import static me.cometkaizo.wavetech.lexer.tokens.types.ObjectType.*;
-import static me.cometkaizo.wavetech.lexer.tokens.types.PrimitiveOperator.*;
-import static me.cometkaizo.wavetech.lexer.tokens.types.PropertyModifier.*;
-import static me.cometkaizo.wavetech.lexer.tokens.types.VisibilityModifier.*;
-
-public class MethodDeclarationSyntax extends DeclarationSyntax {
+public class MethodDeclarationSyntax extends Syntax<MethodStructure> {
 
 
-    // (public|protected|private|)
+    // (public|protected|private)?
     // (static)?
     // (abstract|final)?
     // (_primitive-type_|_object-type_|void)
     // _symbol_
-    // (
+    // \(
     // ((_p_|_o_) _symbol_(, (_p_|_o_) _symbol_)*)?
-    // )
-
-    protected final List<TokenType> parameterTypes = new ArrayList<>();
-    protected final List<String> parameterNames = new ArrayList<>();
+    // \)
 
     public MethodDeclarationSyntax() {
 
-        // TODO: 2022-11-04 Store parameter types & names, and allow for single and no-arg methods
-
-        rootNode
-                .optionally(PUBLIC, PACKAGE_PRIVATE, PROTECTED, PRIVATE)
-                .optionally(STATIC)
-                .optionally(ABSTRACT, FINAL)
-                .split(
-                        new ConditionalSyntaxNodeBuilder(PrimitiveType.class), // includes void
-                        new TokenTypeSyntaxNodeBuilder(SYMBOL_OR_REFERENCE, REFERENCE)
+        rootBuilder
+                .optionally("visibility",
+                        PUBLIC,
+                        PROTECTED,
+                        PRIVATE
                 )
-                .then(SYMBOL_OR_REFERENCE, SYMBOL)
+                .optionally("modifier",
+                        STATIC
+                )
+                .optionally("modifier",
+                        ABSTRACT,
+                        FINAL
+                )
+                .then(ReturnTypeSyntax::getInstance)
+                .thenIdentifier("name")
                 .then(L_PAREN)
-                // parameters
-                .optionally(
-                        new ConditionalSyntaxNodeBuilder(PrimitiveType.class), // includes void
-                        new TokenTypeSyntaxNodeBuilder(SYMBOL_OR_REFERENCE, REFERENCE)
-                )
-                .then(SYMBOL_OR_REFERENCE, SYMBOL)/*
-                .peekToken(new MatcherFunction() {
-                    @NotNull
-                    @Override
-                    protected Syntax.Result match(@NotNull Token token, @Nullable Token nextToken) {
-                        Result result = isComma(nextToken) ?
-                                Result.MATCHES_SO_FAR :
-                                Result.MATCHES_EXACT;
-                        LogUtils.info("for token {} and next token {}, matches?");
-                        return result;
-                    }
-                })*/
-                .forEachNextToken(new MatcherFunction("parameters") {
-                    @NotNull
-                    @Override
-                    protected Syntax.Result match(@NotNull Token token, @Nullable Token nextToken) {
-                        Result matchResult = matchNextFor(ParameterSyntax::new, "parameter");
-                        if (matchResult == Result.MATCHES_EXACT) {
-                            if (!isComma(nextToken)) return Result.MATCHES_EXACT;
-                            return Result.MATCHES_SO_FAR;
-                        }
-                        return matchResult;
-                    }
-                })
+                .then(ParameterListSyntax::getInstance)
                 .then(R_PAREN)
-        ;
-
-        addNextExpectedSyntax(new LeftBraceSyntax());
+                .then("body", BlockSyntax::getInstance);
 
     }
 
+    @Override
+    public @NotNull MethodStructure getStructure(SyntaxStructure parent) {
+        return new MethodStructure((ClassStructure) parent);
+    }
 
-    static class ParameterSyntax extends Syntax {
+    private static class ParameterListSyntax extends Syntax<MethodStructure> {
 
-        public ParameterSyntax() {
+        private ParameterListSyntax() {
+            rootBuilder
+                    .optionally(new SyntaxSyntaxNodeBuilder<>(ParameterSyntax::getInstance).withLabel("parameter")
+                            .zeroOrMore(ExtraParameterSyntax::getInstance));
+        }
 
-            rootNode
+        @Override
+        public @Nullable MethodStructure getStructure(@Nullable SyntaxStructure parent) {
+            return (MethodStructure) parent;
+        }
+
+        public static @NotNull ParameterListSyntax getInstance() {
+            return InstanceHolder.INSTANCE;
+        }
+
+        private static class InstanceHolder {
+            static final ParameterListSyntax INSTANCE = new ParameterListSyntax();
+        }
+    }
+
+    private static class ReturnTypeSyntax extends Syntax<MethodStructure> {
+
+        private ReturnTypeSyntax() {
+            rootBuilder.split(
+                    VOID.node(),
+                    new SyntaxSyntaxNodeBuilder<>(ClassAccessSyntax::getInstance).withLabel("returnType")
+            );
+        }
+
+        @Override
+        public @Nullable MethodStructure getStructure(@Nullable SyntaxStructure parent) {
+            return (MethodStructure) parent;
+        }
+
+        public static @NotNull ReturnTypeSyntax getInstance() {
+            return InstanceHolder.INSTANCE;
+        }
+
+        private static class InstanceHolder {
+            static final ReturnTypeSyntax INSTANCE = new ReturnTypeSyntax();
+        }
+    }
+
+    private static class ExtraParameterSyntax extends Syntax<MethodStructure> {
+
+        private ExtraParameterSyntax() {
+
+            rootBuilder
                     .then(COMMA)
-                    .split(
-                            new ConditionalSyntaxNodeBuilder(PrimitiveType.class), // includes void
-                            new TokenTypeSyntaxNodeBuilder(SYMBOL_OR_REFERENCE, REFERENCE)
-                    )
-                    .then(SYMBOL_OR_REFERENCE, SYMBOL)
-            ;
+                    .then("parameter", ParameterSyntax::getInstance);
 
         }
 
         @Override
-        protected boolean isValidInStatus(Parser.Status status) {
-            return true;
+        public @NotNull MethodStructure getStructure(SyntaxStructure parent) {
+            return (MethodStructure) parent;
+        }
+
+        public static @NotNull ExtraParameterSyntax getInstance() {
+            return InstanceHolder.INSTANCE;
+        }
+
+        private static class InstanceHolder {
+            static final ExtraParameterSyntax INSTANCE = new ExtraParameterSyntax();
+        }
+    }
+
+    public static class ParameterSyntax extends Syntax<MethodStructure.Parameter> {
+
+        private ParameterSyntax() {
+            rootBuilder
+                    .then("type", ClassAccessSyntax::getInstance)
+                    .thenIdentifier("name");
         }
 
         @Override
-        protected boolean isValidInContext(DeclaredNode context) {
-            return true;
+        public @NotNull MethodStructure.Parameter getStructure(SyntaxStructure parent) {
+            return new MethodStructure.Parameter();
+        }
+
+        public static @NotNull ParameterSyntax getInstance() {
+            return InstanceHolder.INSTANCE;
+        }
+
+        private static class InstanceHolder {
+            static final ParameterSyntax INSTANCE = new ParameterSyntax();
         }
     }
 
-    private boolean isComma(Token candidate) {
-        if (candidate == null) return false;
-        return candidate.getType().equals(COMMA);
+
+    public static MethodDeclarationSyntax getInstance() {
+        return InstanceHolder.INSTANCE;
     }
 
-    @Override
-    public boolean hasBody() {
-        return true;
+    private static class InstanceHolder {
+        static final MethodDeclarationSyntax INSTANCE = new MethodDeclarationSyntax();
     }
 
-    @Override
-    protected boolean isValidInStatus(Parser.Status status) {
-        return true;
-    }
-
-    @Override
-    protected boolean isValidInContext(DeclaredNode context) {
-        return context instanceof ClassNode;
-    }
 }

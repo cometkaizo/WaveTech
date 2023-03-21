@@ -5,9 +5,12 @@ import me.cometkaizo.commands.nodes.ArgumentCommandNodeBuilder;
 import me.cometkaizo.commands.nodes.Command;
 import me.cometkaizo.wavetech.WaveTechApp;
 
+import java.util.List;
+
 public class ExecuteCommand extends Command {
 
     protected final WaveTechApp app;
+    public static final List<String> names = List.of("execute");
 
     public ExecuteCommand(WaveTechApp app) {
         this.app = app;
@@ -30,4 +33,8 @@ public class ExecuteCommand extends Command {
     }
 
 
+    @Override
+    public List<String> getNames() {
+        return names;
+    }
 }

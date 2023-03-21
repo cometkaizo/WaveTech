@@ -1,6 +1,6 @@
 package me.cometkaizo.commands.nodes;
 
-class EmptyCommandNodeBuilder extends SoftCommandNodeBuilder {
+public class EmptyCommandNodeBuilder extends SoftCommandNodeBuilder {
 
     @Override
     protected EmptyCommandNode build() {
