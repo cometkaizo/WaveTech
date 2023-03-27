@@ -25,7 +25,7 @@ public abstract class SyntaxNodeBuilder {
     boolean splits = false;
 
     @NotNull
-    protected SyntaxNodeBuilder farthestAncestor = this;
+    private SyntaxNodeBuilder farthestAncestor = this;
 
 
     public SyntaxNodeBuilder() {
@@ -156,7 +156,7 @@ public abstract class SyntaxNodeBuilder {
             addSubNode(none);
         }
 
-        mergeDestination.farthestAncestor = this.farthestAncestor;
+        ((SyntaxNodeBuilder) mergeDestination).farthestAncestor = this.farthestAncestor;
         return mergeDestination;
 
     }
