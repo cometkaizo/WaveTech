@@ -80,7 +80,7 @@ public class CommandGroup {
 
     private static void validateInput(@NotNull String input) {
         Objects.requireNonNull(input, "Command cannot be null");
-        if (input.isBlank()) throw new IllegalArgumentException("Command cannot be blank");
+        if (input.isBlank()) throw new UnknownCommandException("Command cannot be blank");
     }
 
 }

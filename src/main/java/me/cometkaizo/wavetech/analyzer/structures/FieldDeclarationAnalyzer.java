@@ -5,7 +5,6 @@ import me.cometkaizo.wavetech.analyzer.diagnostics.*;
 import me.cometkaizo.wavetech.parser.structures.ClassStructure;
 import me.cometkaizo.wavetech.parser.structures.FieldDeclaration;
 import me.cometkaizo.wavetech.parser.structures.Identifier;
-import me.cometkaizo.wavetech.parser.structures.VariableAccessor;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class FieldDeclarationAnalyzer implements ClassContextAnalyzer {
                 problems.add(new IncompatibleTypesDiagnostic(actualType, expectedType, fieldDeclaration.initializer.value));
         }
 
-        checkUsedVariables(problems, resources);
+        //checkUsedVariables(problems, resources);
 
     }
 
@@ -46,7 +45,7 @@ public class FieldDeclarationAnalyzer implements ClassContextAnalyzer {
         if (fieldDeclaration.visibility == null) throw new IllegalStateException("Visibility is null");
     }
 
-
+/*
     private void checkUsedVariables(List<Diagnostic> problems, ClassResourcePool resources) {
         if (fieldDeclaration.initializer == null) return;
 
@@ -59,7 +58,7 @@ public class FieldDeclarationAnalyzer implements ClassContextAnalyzer {
                 checkReferenceFromStaticContext(problems, resources, variableAccessor.variableName);
             }
         }
-    }
+    }*/
 
     private void checkSelfReference(List<Diagnostic> problems, Identifier variableName) {
         if (variableName.equals(fieldDeclaration.name))

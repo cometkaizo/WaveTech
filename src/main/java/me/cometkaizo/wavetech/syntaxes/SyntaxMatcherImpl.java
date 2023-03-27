@@ -1,5 +1,6 @@
 package me.cometkaizo.wavetech.syntaxes;
 
+import me.cometkaizo.logging.LogUtils;
 import me.cometkaizo.util.PeekingIterator;
 import me.cometkaizo.wavetech.lexer.tokens.Position;
 import me.cometkaizo.wavetech.lexer.tokens.Token;
@@ -10,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SyntaxMatcherImpl implements SyntaxMatcher {
 
@@ -68,6 +70,8 @@ public class SyntaxMatcherImpl implements SyntaxMatcher {
         int startCursor = tokens.cursor();
 
         var matched = matches(node, structure);
+
+        LogUtils.debug("Node {} matched? {} from {}", node.toPrettyString(), matched, node.syntaxes.stream().map(s -> s.getClass().getSimpleName()).collect(Collectors.joining(", ")));
 
         if (matched) {
             if (tokens.cursor() >= lastDepth) clearProblems();

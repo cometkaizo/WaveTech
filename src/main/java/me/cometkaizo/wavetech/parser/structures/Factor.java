@@ -13,6 +13,7 @@ public class Factor extends AbstractSyntaxStructure<ProgramContextAnalyzer> {
     // exactly one of these will be non-null
     public LiteralStructure value; // a literal such as 0.1, 3, 5d, or "string"
     public ResourceAccessor<?> resourceAccessor;
+
     public ClassStructure type;
 
 

@@ -2,12 +2,11 @@ package me.cometkaizo.wavetech.analyzer.structures;
 
 import me.cometkaizo.wavetech.analyzer.ResourcePool;
 import me.cometkaizo.wavetech.analyzer.diagnostics.Diagnostic;
-import me.cometkaizo.wavetech.analyzer.diagnostics.InapplicableOperatorDiagnostic;
 import me.cometkaizo.wavetech.lexer.tokens.types.OperatorKeyword;
 import me.cometkaizo.wavetech.parser.BuiltInClasses;
 import me.cometkaizo.wavetech.parser.structures.ClassStructure;
 import me.cometkaizo.wavetech.parser.structures.Expression;
-import me.cometkaizo.wavetech.parser.structures.Term;
+import me.cometkaizo.wavetech.parser.structures.VariableDeclaration;
 
 import java.util.List;
 
@@ -22,31 +21,23 @@ public class ExpressionAnalyzer implements ProgramContextAnalyzer {
     @Override
     public void analyze(List<Diagnostic> problems, ResourcePool resources) {
         if (analyzed) return;
-
-        Term term1 = expression.terms.get(0);
-        term1.getAnalyzer().analyze(problems, resources);
-        if (term1.type == null) return;
-        ClassStructure lastType = term1.type;
-
-        for (int index = 1; index < expression.terms.size(); index++) {
-            OperatorKeyword operator = expression.operators.get(index - 1);
-            Term term = expression.terms.get(index);
-
-            term.getAnalyzer().analyze(problems, resources);
-            if (term.type == null) return;
-            ClassStructure type = term.type;
-
-            var newType = getResultType(operator, lastType, type);
-
-            if (newType == null) {
-                problems.add(new InapplicableOperatorDiagnostic(operator, lastType, type, expression));
-                return;
-            }
-            lastType = newType;
-        }
-
-        expression.type = lastType;
         analyzed = true;
+        throwIfIllegalState();
+
+        if (expression.varAssignment != null) {
+            expression.varAssignment.getAnalyzer().analyze(problems, resources);
+            var assignedVariableAccessor = expression.varAssignment.variableAccessor;
+            var assignedVariable = (VariableDeclaration) resources.getResourceOrAnalyze(assignedVariableAccessor, problems);
+            if (assignedVariable != null) expression.type = assignedVariable.getTypeOrAnalyze(resources, problems);
+        } else {
+            expression.ternary.getAnalyzer().analyze(problems, resources);
+            expression.type = expression.ternary.type;
+        }
+    }
+
+    private void throwIfIllegalState() {
+        if (expression.varAssignment == null && expression.ternary == null)
+            throw new IllegalStateException("Both variable assignment and ternary are null");
     }
 
     private ClassStructure getResultType(OperatorKeyword operator, ClassStructure leftType, ClassStructure rightType) {

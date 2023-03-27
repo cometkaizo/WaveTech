@@ -1,6 +1,7 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+    <inspection_tool class="7e1cee67-b7ea-3e3e-9201-c386a4457c66" enabled="true" level="ERROR" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
     <inspection_tool class="BlockMarkerComments" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BooleanMethodIsAlwaysInverted" enabled="true" level="TEXT ATTRIBUTES" enabled_by_default="true" editorAttributes="CONSIDERATION_ATTRIBUTES" />
     <inspection_tool class="BoundedWildcard" enabled="true" level="WARNING" enabled_by_default="true">
@@ -25,6 +26,18 @@
       <option name="ignoreSerializable" value="false" />
       <option name="ignoreCloneable" value="false" />
     </inspection_tool>
+    <inspection_tool class="SSBasedInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <replaceConfiguration name="Array Creation with '&lt;&gt;'" description="Removes diamond operators from array creations" problemDescriptor="Replace with non-generic array creation" text="new $Class$&lt;&gt;[$Argument$]" recursive="false" caseInsensitive="true" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="new $Class$[$Argument$]">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="Class" within="" contains="" />
+        <constraint name="Argument" within="" contains="" />
+      </replaceConfiguration>
+      <replaceConfiguration name="Initializer Array Creation with '&lt;&gt;'" description="Removes diamond operators from array creations with initializers" problemDescriptor="Replace with non-generic array creation" text="new $Class$&lt;&gt;[] {$Argument$}" recursive="false" caseInsensitive="true" type="JAVA" pattern_context="default" reformatAccordingToStyle="false" shortenFQN="false" replacement="new $Class$[] {$Argument$}">
+        <constraint name="__context__" within="" contains="" />
+        <constraint name="Class" within="" contains="" />
+        <constraint name="Argument" minCount="0" maxCount="2147483647" within="" contains="" />
+      </replaceConfiguration>
+    </inspection_tool>
     <inspection_tool class="SameParameterValue" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ThreadDumpStack" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ThrowablePrintStackTrace" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -32,6 +45,7 @@
       <option name="highestModifier" value="protected" />
     </inspection_tool>
     <inspection_tool class="UseOfObsoleteDateTimeApi" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="eb6ad6b1-9b18-3177-bd1e-834aa3abb61f" enabled="true" level="ERROR" enabled_by_default="true" editorAttributes="ERRORS_ATTRIBUTES" />
     <inspection_tool class="unused" enabled="true" level="WARNING" enabled_by_default="true" inner_class="protected" field="protected" method="protected" parameter="protected" checkParameterExcludingHierarchy="false">
       <option name="LOCAL_VARIABLE" value="true" />
       <option name="FIELD" value="true" />

@@ -38,7 +38,7 @@ public class TermAnalyzer implements ProgramContextAnalyzer {
             var newType = getResultType(operator, lastType, factor.type);
 
             if (newType == null) {
-                problems.add(new InapplicableOperatorDiagnostic(operator, lastType, factor.type, term));
+                problems.add(new InapplicableOperatorDiagnostic(operator, term, lastType, factor.type));
                 return;
             }
             lastType = newType;

@@ -2,37 +2,39 @@ package me.cometkaizo.wavetech.parser.structures;
 
 import me.cometkaizo.wavetech.analyzer.structures.ExpressionAnalyzer;
 import me.cometkaizo.wavetech.analyzer.structures.ProgramContextAnalyzer;
-import me.cometkaizo.wavetech.lexer.tokens.Token;
-import me.cometkaizo.wavetech.lexer.tokens.types.OperatorKeyword;
 import me.cometkaizo.wavetech.syntaxes.AbstractSyntaxStructure;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class Expression extends AbstractSyntaxStructure<ProgramContextAnalyzer> {
 
-    public List<Term> terms = new ArrayList<>(2);
-    public List<OperatorKeyword> operators = new ArrayList<>(1);
+    // exactly one of these will be non-null
+    public TernaryExpression ternary;
+    public VariableAssignation varAssignment;
+
+    // the type of this expression; null until this expression is analyzed
     public ClassStructure type;
 
     @Override
     public void store(String label, Object object) throws IllegalArgumentException {
-        switch (label) {
-            case "term" -> terms.add((Term) object);
-            case "operator" -> operators.add((OperatorKeyword) ((Token) object).getType());
+        if (!"part".equals(label)) return;
+
+        if (object instanceof TernaryExpression) {
+            ternary = cast(object);
+        } else if (object instanceof VariableAssignation) {
+            varAssignment = cast(object);
         }
     }
 
     public @NotNull ProgramContextAnalyzer createAnalyzer() {
         return new ExpressionAnalyzer(this);
     }
-
+/*
     /**
      * Gets all used variable identifiers. May include non-explicit field accesses.
      * @return all used variable identifiers in this structure.
-     */
+     *
     public List<ResourceAccessor<?>> getUsedResources() {
         List<ResourceAccessor<?>> usedVariableNames = new ArrayList<>(2);
 
@@ -41,13 +43,14 @@ public class Expression extends AbstractSyntaxStructure<ProgramContextAnalyzer> 
         }
 
         return usedVariableNames;
-    }
+    }*/
 
     @Override
     public String toString() {
         return "Expression{" +
-                "terms=" + terms +
-                ", operators=" + operators +
+                "ternary=" + ternary +
+                ", assignment=" + varAssignment +
+                ", type=" + type +
                 '}';
     }
 
@@ -56,12 +59,11 @@ public class Expression extends AbstractSyntaxStructure<ProgramContextAnalyzer> 
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Expression that = (Expression) o;
-        return Objects.equals(terms, that.terms) && Objects.equals(operators, that.operators);
+        return Objects.equals(ternary, that.ternary) && Objects.equals(varAssignment, that.varAssignment) && Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(terms, operators);
+        return Objects.hash(ternary, varAssignment, type);
     }
-
 }

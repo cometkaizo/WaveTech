@@ -2,7 +2,6 @@ package me.cometkaizo.wavetech.syntaxes;
 
 import me.cometkaizo.logging.LogUtils;
 import me.cometkaizo.util.CollectionUtils;
-import me.cometkaizo.util.NullableOptional;
 import me.cometkaizo.wavetech.lexer.tokens.TokenType;
 import me.cometkaizo.wavetech.parser.syntaxes.ClassAccessSyntax;
 import me.cometkaizo.wavetech.parser.syntaxes.IdentifierSyntax;
@@ -127,13 +126,12 @@ public abstract class SyntaxNodeBuilder {
         var subNodes = CollectionUtils.map(types, TokenTypeSyntaxNodeBuilder::new, TokenTypeSyntaxNodeBuilder[]::new);
         return split(label, subNodes);
     }
-    @SafeVarargs
-    public final <T extends ResultBearingSyntaxNodeBuilder<?>> EmptySyntaxNodeBuilder split(String label, T... subNodes) {
+    public final EmptySyntaxNodeBuilder split(String label, ResultBearingSyntaxNodeBuilder<?>... subNodes) {
         CollectionUtils.forEach(subNodes, subNode -> subNode.withLabel(label));
         return split(subNodes);
     }
     @SafeVarargs
-    public final EmptySyntaxNodeBuilder split(String label, Supplier<? extends Syntax<? extends SyntaxStructure>>... suppliers) {
+    public final EmptySyntaxNodeBuilder split(String label, Supplier<? extends Syntax<?>>... suppliers) {
         var nodes = CollectionUtils.map(suppliers, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder[]::new);
         return split(label, nodes);
     }
@@ -289,38 +287,81 @@ public abstract class SyntaxNodeBuilder {
     @SafeVarargs
     public final <T extends SyntaxStructure>
     CustomSyntaxNodeBuilder<Void> zeroOrMore(Supplier<? extends Syntax<? extends T>>... syntaxes) {
-        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder[]::new);
-        var node = createLoop(0, -1, syntaxNodes);
-        then(node);
-        return node;
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return zeroOrMore(syntaxNodes);
     }
 
     @SafeVarargs
     public final <T extends SyntaxStructure>
     CustomSyntaxNodeBuilder<Void> zeroOrMore(String label, Supplier<? extends Syntax<? extends T>>... syntaxes) {
-        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder[]::new);
-        for (var syntaxNode : syntaxNodes) syntaxNode.withLabel(label);
-
-        var node = createLoop(0, -1, syntaxNodes);
-        then(node);
-        return node;
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return zeroOrMore(label, syntaxNodes);
     }
 
     @SafeVarargs
     public final <T>
     CustomSyntaxNodeBuilder<Void> zeroOrMore(ResultBearingSyntaxNodeBuilder<? extends T>... nodes) {
-        var node = createLoop(0, -1, nodes);
-        then(node);
-        return node;
+        return loop(0, -1, nodes);
     }
     @SafeVarargs
     public final <T>
     CustomSyntaxNodeBuilder<Void> zeroOrMore(String label, ResultBearingSyntaxNodeBuilder<? extends T>... nodes) {
         for (var node : nodes) node.withLabel(label);
+        return zeroOrMore(nodes);
+    }
 
-        var node = createLoop(0, -1, nodes);
+    @SafeVarargs
+    public final <T extends SyntaxStructure>
+    CustomSyntaxNodeBuilder<Void> oneOrMore(Supplier<? extends Syntax<? extends T>>... syntaxes) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return oneOrMore(syntaxNodes);
+    }
+
+    @SafeVarargs
+    public final <T extends SyntaxStructure>
+    CustomSyntaxNodeBuilder<Void> oneOrMore(String label, Supplier<? extends Syntax<? extends T>>... syntaxes) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return oneOrMore(label, syntaxNodes);
+    }
+
+    @SafeVarargs
+    public final <T>
+    CustomSyntaxNodeBuilder<Void> oneOrMore(ResultBearingSyntaxNodeBuilder<? extends T>... nodes) {
+        return loop(1, -1, nodes);
+    }
+    @SafeVarargs
+    public final <T>
+    CustomSyntaxNodeBuilder<Void> oneOrMore(String label, ResultBearingSyntaxNodeBuilder<? extends T>... nodes) {
+        for (var node : nodes) node.withLabel(label);
+        return oneOrMore(nodes);
+    }
+
+    @SafeVarargs
+    public final <T extends SyntaxStructure>
+    CustomSyntaxNodeBuilder<Void> loop(int min, int max, Supplier<? extends Syntax<? extends T>>... syntaxes) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return loop(min, max, syntaxNodes);
+    }
+
+    @SafeVarargs
+    public final <T extends SyntaxStructure>
+    CustomSyntaxNodeBuilder<Void> loop(int min, int max, String label, Supplier<? extends Syntax<? extends T>>... syntaxes) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return loop(min, max, label, syntaxNodes);
+    }
+
+    @SafeVarargs
+    public final <T>
+    CustomSyntaxNodeBuilder<Void> loop(int min, int max, ResultBearingSyntaxNodeBuilder<? extends T>... nodes) {
+        var node = createLoop(min, max, nodes);
         then(node);
         return node;
+    }
+    @SafeVarargs
+    public final <T>
+    CustomSyntaxNodeBuilder<Void> loop(int min, int max, String label, ResultBearingSyntaxNodeBuilder<? extends T>... nodes) {
+        for (var node : nodes) node.withLabel(label);
+        return loop(min, max, nodes);
     }
 
     @NotNull
@@ -328,32 +369,408 @@ public abstract class SyntaxNodeBuilder {
     CustomSyntaxNodeBuilder<Void> createLoop(int min, int max, ResultBearingSyntaxNodeBuilder<?>[] nodes) {
         if (nodes.length == 0) throw new IllegalArgumentException("No Nodes to loop!");
 
+        var nodeSyntax = new NodeBundleSyntax(nodes);
+        return new LoopSyntaxNodeBuilder(min, max, nodeSyntax);
+    }
 
-        var nodeSyntax = new NodeBundleSyntax<>(nodes);
-        return new CustomSyntaxNodeBuilder<>((tokens, parent, matcher) -> {
-            if (!tokens.hasNext()) return null;
-            int startCursor = tokens.cursor();
 
-            for (int iterationCount = 0; max < 0 || iterationCount != max + 1; iterationCount ++) {
-                int previousCursor = tokens.cursor();
 
-                var futureResult = matcher.tryMatch(nodeSyntax, parent, null);
 
-                if (futureResult == null) {
-                    if (iterationCount >= min) {
-                        tokens.jumpTo(previousCursor);
-                        return NullableOptional.of(null);
-                    } else {
-                        tokens.jumpTo(startCursor);
-                        return NullableOptional.empty();
-                    }
-                }
 
-            }
 
-            tokens.jumpTo(startCursor);
-            return null;
-        });
+
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(Supplier<? extends Syntax<?>>[] syntaxes,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return zeroOrMoreInterlace(syntaxNodes, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(Supplier<? extends Syntax<?>>[] syntaxes,
+                                                                   String label,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return zeroOrMoreInterlace(syntaxNodes, label, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String label,
+                                                                   Supplier<? extends Syntax<?>>[] syntaxes,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return zeroOrMoreInterlace(label, syntaxNodes, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String syntaxLabel,
+                                                                   Supplier<? extends Syntax<?>>[] syntaxes,
+                                                                   String delimiterLabel,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return zeroOrMoreInterlace(syntaxLabel, syntaxNodes, delimiterLabel, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(SyntaxNodeBuilder[] nodes,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(0, -1, delimiters, nodes);
+    }
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(SyntaxNodeBuilder[] nodes,
+                                                                   String label,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(label);
+        return zeroOrMoreInterlace(nodes, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String label,
+                                                                   ResultBearingSyntaxNodeBuilder<?>[] nodes,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(0, -1, nodes, delimiters);
+    }
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String nodeLabel,
+                                                                   ResultBearingSyntaxNodeBuilder<?>[] nodes,
+                                                                   String delimiterLabel,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(delimiterLabel);
+        for (var node : nodes) node.withLabel(nodeLabel);
+        return zeroOrMoreInterlace(nodes, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(Supplier<? extends Syntax<?>> syntax,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return zeroOrMoreInterlace(syntaxNodes, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(Supplier<? extends Syntax<?>> syntax,
+                                                                   String label,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return zeroOrMoreInterlace(syntaxNodes, label, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String label,
+                                                                   Supplier<? extends Syntax<?>> syntax,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return zeroOrMoreInterlace(label, syntaxNodes, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String syntaxLabel,
+                                                                   Supplier<? extends Syntax<?>> syntax,
+                                                                   String delimiterLabel,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return zeroOrMoreInterlace(syntaxLabel, syntaxNodes, delimiterLabel, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(SyntaxNodeBuilder node,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(0, -1, node, delimiters);
+    }
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(SyntaxNodeBuilder node,
+                                                                   String label,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(label);
+        return zeroOrMoreInterlace(node, delimiters);
+    }
+
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String label,
+                                                                   ResultBearingSyntaxNodeBuilder<?> node,
+                                                                   SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(0, -1, node, delimiters);
+    }
+    public final CustomSyntaxNodeBuilder<Void> zeroOrMoreInterlace(String nodeLabel,
+                                                                   ResultBearingSyntaxNodeBuilder<?> node,
+                                                                   String delimiterLabel,
+                                                                   ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(delimiterLabel);
+        node.withLabel(nodeLabel);
+        return zeroOrMoreInterlace(node, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(Supplier<? extends Syntax<?>>[] syntaxes,
+                                                     SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return oneOrMoreInterlace(syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(Supplier<? extends Syntax<?>>[] syntaxes,
+                                                     String label,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return oneOrMoreInterlace(syntaxNodes, label, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String label,
+                                                     Supplier<? extends Syntax<?>>[] syntaxes,
+                                                     SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return oneOrMoreInterlace(label, syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String syntaxLabel,
+                                                     Supplier<? extends Syntax<?>>[] syntaxes,
+                                                     String delimiterLabel,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return oneOrMoreInterlace(syntaxLabel, syntaxNodes, delimiterLabel, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(SyntaxNodeBuilder[] nodes,
+                                                     SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(1, -1, nodes, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(SyntaxNodeBuilder[] nodes,
+                                                     String label,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(label);
+        return oneOrMoreInterlace(nodes, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String label,
+                                                     ResultBearingSyntaxNodeBuilder<?>[] nodes,
+                                                     SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(1, -1, label, nodes, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String nodeLabel,
+                                                     ResultBearingSyntaxNodeBuilder<?>[] nodes,
+                                                     String delimiterLabel,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(delimiterLabel);
+        for (var node : nodes) node.withLabel(nodeLabel);
+        return oneOrMoreInterlace(nodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(Supplier<? extends Syntax<?>> syntax,
+                                                     SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return oneOrMoreInterlace(syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(Supplier<? extends Syntax<?>> syntax,
+                                                     String label,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return oneOrMoreInterlace(syntaxNodes, label, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String label,
+                                                     Supplier<? extends Syntax<?>> syntax,
+                                                     SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return oneOrMoreInterlace(label, syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String syntaxLabel,
+                                                     Supplier<? extends Syntax<?>> syntax,
+                                                     String delimiterLabel,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return oneOrMoreInterlace(syntaxLabel, syntaxNodes, delimiterLabel, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(SyntaxNodeBuilder node,
+                                                     SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(1, -1, node, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(SyntaxNodeBuilder node,
+                                                     String label,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(label);
+        return oneOrMoreInterlace(node, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String label,
+                                                     ResultBearingSyntaxNodeBuilder<?> node,
+                                                     SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(1, -1, label, node, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> oneOrMoreInterlace(String nodeLabel,
+                                                     ResultBearingSyntaxNodeBuilder<?> node,
+                                                     String delimiterLabel,
+                                                     ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(delimiterLabel);
+        node.withLabel(nodeLabel);
+        return oneOrMoreInterlace(node, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                Supplier<? extends Syntax<?>>[] syntaxes,
+                                                SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return loopInterlace(min, max, syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                Supplier<? extends Syntax<?>>[] syntaxes,
+                                                String label,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return loopInterlace(min, max, syntaxNodes, label, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String label,
+                                                Supplier<? extends Syntax<?>>[] syntaxes,
+                                                SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return loopInterlace(min, max, label, syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String syntaxLabel,
+                                                Supplier<? extends Syntax<?>>[] syntaxes,
+                                                String delimiterLabel,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = CollectionUtils.map(syntaxes, SyntaxSyntaxNodeBuilder::new, SyntaxSyntaxNodeBuilder<?>[]::new);
+        return loopInterlace(min, max, syntaxLabel, syntaxNodes, delimiterLabel, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                SyntaxNodeBuilder[] nodes,
+                                                SyntaxNodeBuilder... delimiters) {
+        var node = createInterlaceLoop(min, max, nodes, delimiters);
+        then(node);
+        return node;
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                SyntaxNodeBuilder[] nodes,
+                                                String label,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(label);
+        return loopInterlace(min, max, nodes, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String label,
+                                                ResultBearingSyntaxNodeBuilder<?>[] nodes,
+                                                SyntaxNodeBuilder... delimiters) {
+        for (var node : nodes) node.withLabel(label);
+        return loopInterlace(min, max, nodes, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String nodeLabel,
+                                                ResultBearingSyntaxNodeBuilder<?>[] nodes,
+                                                String delimiterLabel,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(delimiterLabel);
+        for (var node : nodes) node.withLabel(nodeLabel);
+        return loopInterlace(min, max, nodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                Supplier<? extends Syntax<?>> syntax,
+                                                SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return loopInterlace(min, max, syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                Supplier<? extends Syntax<?>> syntax,
+                                                String label,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return loopInterlace(min, max, syntaxNodes, label, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String label,
+                                                Supplier<? extends Syntax<?>> syntax,
+                                                SyntaxNodeBuilder... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return loopInterlace(min, max, label, syntaxNodes, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String syntaxLabel,
+                                                Supplier<? extends Syntax<?>> syntax,
+                                                String delimiterLabel,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        var syntaxNodes = new SyntaxSyntaxNodeBuilder[] {new SyntaxSyntaxNodeBuilder<>(syntax)};
+        return loopInterlace(min, max, syntaxLabel, syntaxNodes, delimiterLabel, delimiters);
+    }
+
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                SyntaxNodeBuilder node,
+                                                SyntaxNodeBuilder... delimiters) {
+        return loopInterlace(min, max, new SyntaxNodeBuilder[] {node}, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                SyntaxNodeBuilder node,
+                                                String label,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(label);
+        return loopInterlace(min, max, node, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String label,
+                                                ResultBearingSyntaxNodeBuilder<?> node,
+                                                SyntaxNodeBuilder... delimiters) {
+        node.withLabel(label);
+        return loopInterlace(min, max, node, delimiters);
+    }
+    public final
+    CustomSyntaxNodeBuilder<Void> loopInterlace(int min,
+                                                int max,
+                                                String nodeLabel,
+                                                ResultBearingSyntaxNodeBuilder<?> node,
+                                                String delimiterLabel,
+                                                ResultBearingSyntaxNodeBuilder<?>... delimiters) {
+        for (var delimiter : delimiters) delimiter.withLabel(delimiterLabel);
+        node.withLabel(nodeLabel);
+        return loopInterlace(min, max, node, delimiters);
+    }
+
+
+    @NotNull
+    private static
+    CustomSyntaxNodeBuilder<Void> createInterlaceLoop(int min, int max, SyntaxNodeBuilder[] nodes, SyntaxNodeBuilder[] delimiters) {
+        if (nodes.length == 0) throw new IllegalArgumentException("No Nodes to loop!");
+        if (delimiters.length == 0) throw new IllegalArgumentException("No delimiters!");
+
+        var nodeSyntax = new NodeBundleSyntax(nodes);
+        var delimiterSyntax = new NodeBundleSyntax(delimiters);
+        var extraSyntax = new NodeLineSyntax(() -> delimiterSyntax, () -> nodeSyntax);
+        return new InterlaceSyntaxNodeBuilder(min, max, nodeSyntax, extraSyntax);
     }
 
     public AnchorSyntaxNodeBuilder anchorStart() {
@@ -366,22 +783,6 @@ public abstract class SyntaxNodeBuilder {
         var anchorNode = new AnchorSyntaxNodeBuilder(-1);
         then(anchorNode);
         return anchorNode;
-    }
-
-    private static class NodeBundleSyntax<T> extends Syntax<SyntaxStructure> {
-
-        @SafeVarargs
-        NodeBundleSyntax(ResultBearingSyntaxNodeBuilder<? extends T>... nodes) {
-            if (nodes.length == 1)
-                rootBuilder.then(nodes[0]);
-            else
-                rootBuilder.split(nodes);
-        }
-
-        @Override
-        public @NotNull SyntaxStructure getStructure(SyntaxStructure parent) {
-            return parent;
-        }
     }
 
 

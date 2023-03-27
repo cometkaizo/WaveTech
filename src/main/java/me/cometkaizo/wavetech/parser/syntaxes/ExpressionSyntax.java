@@ -11,10 +11,13 @@ public class ExpressionSyntax extends Syntax<Expression> {
 
     private ExpressionSyntax() {
         rootBuilder
-                .then("term", TermSyntax::getInstance)
-                .zeroOrMore(ExtraTermSyntax::getInstance);
+                .split("part", // don't forget to make structures and add labels to everything!
+                        TernaryExpressionSyntax::getInstance,
+                        VariableAssignationSyntax::getNoSemicolonInstance
+                );
     }
 
+    @Deprecated
     public static class ExtraTermSyntax extends Syntax<Expression> {
 
         private ExtraTermSyntax() {

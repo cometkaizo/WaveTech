@@ -9,8 +9,8 @@ public class IncompatibleTypesDiagnostic extends ErrorDiagnostic {
     }
 
     private static String createMessage(ClassStructure actualType, ClassStructure expectedType) {
-        String actualTypeName = actualType.name.name;
-        String expectedTypeName = expectedType.name.name;
+        String actualTypeName = actualType != null ? actualType.name.name : "[Unknown]";
+        String expectedTypeName = expectedType != null ? expectedType.name.name : "[Unknown]";
 
         return "Type '" + actualTypeName + "' cannot be cast to required type '" + expectedTypeName + '\'';
     }

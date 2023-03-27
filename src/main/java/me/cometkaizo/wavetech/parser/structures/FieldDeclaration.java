@@ -44,11 +44,11 @@ public class FieldDeclaration extends AbstractSyntaxStructure<FieldDeclarationAn
             case "initializer" -> initializer = cast(object);
         }
     }
-
+/*
     public @NotNull List<ResourceAccessor<?>> getUsedFieldNames() {
         if (initializer.value != null) return initializer.value.getUsedResources();
         return List.of();
-    }
+    }*/
 
     @Override
     public String toString() {

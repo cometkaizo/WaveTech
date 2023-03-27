@@ -1,12 +1,9 @@
 package me.cometkaizo.wavetech.parser.structures;
 
-import me.cometkaizo.wavetech.analyzer.MethodResourcePool;
-import me.cometkaizo.wavetech.analyzer.diagnostics.Diagnostic;
 import me.cometkaizo.wavetech.analyzer.structures.MethodContextAnalyzer;
 import me.cometkaizo.wavetech.syntaxes.AbstractSyntaxStructure;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 public class WhileLoopStatement extends AbstractSyntaxStructure<MethodContextAnalyzer> implements MethodStatement {
@@ -25,19 +22,7 @@ public class WhileLoopStatement extends AbstractSyntaxStructure<MethodContextAna
     @Override
     @NotNull
     protected MethodContextAnalyzer createAnalyzer() {
-        return new MethodContextAnalyzer() {
-            boolean analyzed = false;
-            @Override
-            public void analyze(List<Diagnostic> problems, MethodResourcePool resources) {
-                if (analyzed) return;
-                analyzed = true;
-
-                var copiedResources = resources.copy();
-
-                condition.getAnalyzer().analyze(problems, copiedResources);
-                body.getAnalyzer().analyze(problems, copiedResources);
-            }
-        };
+        return new WhileLoopAnalyzer(this);
     }
 
     @Override
@@ -60,4 +45,5 @@ public class WhileLoopStatement extends AbstractSyntaxStructure<MethodContextAna
     public int hashCode() {
         return Objects.hash(condition, body);
     }
+
 }

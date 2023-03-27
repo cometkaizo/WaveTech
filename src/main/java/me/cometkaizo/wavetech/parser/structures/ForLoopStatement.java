@@ -1,12 +1,10 @@
 package me.cometkaizo.wavetech.parser.structures;
 
-import me.cometkaizo.wavetech.analyzer.MethodResourcePool;
-import me.cometkaizo.wavetech.analyzer.diagnostics.Diagnostic;
+import me.cometkaizo.wavetech.analyzer.structures.ForLoopAnalyzer;
 import me.cometkaizo.wavetech.analyzer.structures.MethodContextAnalyzer;
 import me.cometkaizo.wavetech.syntaxes.AbstractSyntaxStructure;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Objects;
 
 public class ForLoopStatement extends AbstractSyntaxStructure<MethodContextAnalyzer> implements MethodStatement {
@@ -29,22 +27,7 @@ public class ForLoopStatement extends AbstractSyntaxStructure<MethodContextAnaly
     @Override
     @NotNull
     protected MethodContextAnalyzer createAnalyzer() {
-        return new MethodContextAnalyzer() {
-            boolean analyzed = false;
-            @Override
-            public void analyze(List<Diagnostic> problems, MethodResourcePool resources) {
-                if (analyzed) return;
-                analyzed = true;
-
-                var copiedResources = resources.copy();
-
-                if (null != varInit) varInit.getAnalyzer().analyze(problems, copiedResources);
-                if (null != terminationCondition) terminationCondition.getAnalyzer().analyze(problems, copiedResources);
-                if (null != varUpdate) varUpdate.getAnalyzer().analyze(problems, copiedResources);
-                body.getAnalyzer().analyze(problems, copiedResources);
-
-            }
-        };
+        return new ForLoopAnalyzer(this);
     }
 
     @Override
@@ -69,4 +52,5 @@ public class ForLoopStatement extends AbstractSyntaxStructure<MethodContextAnaly
     public int hashCode() {
         return Objects.hash(varInit, terminationCondition, varUpdate, body);
     }
+
 }

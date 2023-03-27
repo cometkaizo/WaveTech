@@ -1,5 +1,6 @@
 package me.cometkaizo.wavetech.parser.syntaxes;
 
+import me.cometkaizo.wavetech.lexer.tokens.types.OperatorKeyword;
 import me.cometkaizo.wavetech.parser.structures.VariableAssignation;
 import me.cometkaizo.wavetech.syntaxes.Syntax;
 import me.cometkaizo.wavetech.syntaxes.SyntaxStructure;
@@ -9,18 +10,26 @@ import static me.cometkaizo.wavetech.lexer.tokens.types.OperatorKeyword.*;
 
 public class VariableAssignationSyntax extends Syntax<VariableAssignation> {
 
+    private static final OperatorKeyword[] operators = {
+            EQUALS,
+            ASTERISK_EQUALS,
+            SLASH_EQUALS,
+            PERCENT_EQUALS,
+            PLUS_EQUALS,
+            MINUS_EQUALS,
+            L_SHIFT_EQUALS,
+            R_SHIFT_EQUALS,
+            TRIPLE_R_SHIFT_EQUALS,
+            AMPERSAND_EQUALS,
+            CARET_EQUALS,
+            PIPE_EQUALS
+    };
+
     private VariableAssignationSyntax(boolean endWithSemicolon) {
 
         var builder = rootBuilder
                 .then("variableAccessor", VariableAccessSyntax::getInstance)
-                .split("operation",
-                        EQUALS,
-                        PLUS_ASSIGN,
-                        MINUS_ASSIGN,
-                        ASTERISK_ASSIGN,
-                        DOUBLE_ASTERISK_ASSIGN,
-                        SLASH_ASSIGN
-                )
+                .split("operation", operators)
                 .then("value", ExpressionSyntax::getInstance);
 
         if (endWithSemicolon)

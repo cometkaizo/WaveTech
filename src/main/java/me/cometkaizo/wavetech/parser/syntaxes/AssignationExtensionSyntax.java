@@ -13,11 +13,11 @@ public class AssignationExtensionSyntax extends Syntax<AssignationExtension> {
         var builder = rootBuilder
                 .split("operation",
                         EQUALS,
-                        PLUS_ASSIGN,
-                        MINUS_ASSIGN,
-                        ASTERISK_ASSIGN,
-                        DOUBLE_ASTERISK_ASSIGN,
-                        SLASH_ASSIGN
+                        PLUS_EQUALS,
+                        MINUS_EQUALS,
+                        ASTERISK_EQUALS,
+                        DOUBLE_ASTERISK_EQUALS,
+                        SLASH_EQUALS
                 )
                 .then("value", ExpressionSyntax::getInstance);
 
